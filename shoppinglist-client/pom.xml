@@ -11,7 +11,7 @@
 	</parent>
 	<dependencies>
 		<dependency>
-			<groupId>de.ronnyfriedland</groupId>
+			<groupId>de.kerron</groupId>
 			<artifactId>shoppinglist-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
