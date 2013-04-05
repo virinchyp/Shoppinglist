@@ -6,8 +6,8 @@
   <packaging>pom</packaging>
   <name>SHOPPINGLIST</name>
   <modules>
-  	<module>shoppinglist-client</module>
   	<module>shoppinglist-common</module>
+  	<module>shoppinglist-client</module>
   	<module>shoppinglist-app</module>
   	<module>shoppinglist-server</module>
   	<module>shoppinglist-db</module>
