@@ -14,7 +14,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 import de.kerron.shoppinglist.client.config.Configurator;
-import de.ronnyfriedland.shoppinglist.entry.ShoppingListEntry;
+import de.kerron.shoppinglist.entry.ShoppingListEntry;
 
 /**
  * @author Ronny Friedland
