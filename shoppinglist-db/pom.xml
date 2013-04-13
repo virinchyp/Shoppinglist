@@ -7,4 +7,5 @@
   </parent>
   <artifactId>shoppinglist-db</artifactId>
   <name>SHOPPINGLIST DB</name>
+  <description>Liquibase scripts</description>
 </project>
