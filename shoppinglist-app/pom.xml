@@ -7,4 +7,39 @@
   </parent>
   <artifactId>shoppinglist-app</artifactId>
   <name>SHOPPINGLIST APP</name>
-</project>
+  <packaging>apk</packaging>
+ <dependencies>
+  <dependency>
+   <groupId>com.google.android</groupId>
+   <artifactId>android</artifactId>
+   <version>2.2.1</version>
+   <scope>provided</scope>
+  </dependency>
+ </dependencies>
+ <build>
+  <finalName>${project.artifactId}</finalName>
+  <sourceDirectory>src</sourceDirectory>
+  <pluginManagement>
+   <plugins>
+    <plugin>
+     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+     <artifactId>android-maven-plugin</artifactId>
+     <version>3.1.1</version>
+     <extensions>true</extensions>
+    </plugin>
+   </plugins>
+  </pluginManagement>
+  <plugins>
+   <plugin>
+    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+    <artifactId>android-maven-plugin</artifactId>
+    <configuration>
+     <sdk>
+      <path>/Users/ronnyfriedland/Downloads/adt-bundle-mac-x86_64-20130219/sdk/</path>
+      <platform>17</platform>
+     </sdk>
+    </configuration>
+   </plugin>
+  </plugins>
+ </build>
+</project> 

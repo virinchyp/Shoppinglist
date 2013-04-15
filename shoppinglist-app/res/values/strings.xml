@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Shopping List</string>
+    <string name="action_settings">Settings</string>
+    <string name="new_entry">neuer Eintrag</string>
+
+    <string-array name="quantity">
+        <item>Stück</item>
+        <item>Gramm</item>
+        <item>Kilogramm</item>
+        <item>Liter</item>
+    </string-array>
+
+    <color name="background">#dedede</color>
+
+    <string name="title_activity_action_bar">ActionBarActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+</resources>

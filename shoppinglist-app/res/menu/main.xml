@@ -1,0 +1,34 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <group
+        android:id="@+id/actionGroup"
+        android:enabled="true"
+        android:menuCategory="container"
+        android:visible="true" >
+        <item
+            android:id="@+id/clearlistItems"
+            android:menuCategory="secondary"
+            android:showAsAction="never"
+            android:title="Liste leeren">
+        </item>
+        <item
+            android:id="@+id/clearFinishedItems"
+            android:menuCategory="secondary"
+            android:showAsAction="never"
+            android:title="Fertige Einträge entfernen">
+        </item>
+        <item
+            android:id="@+id/sendList"
+            android:menuCategory="secondary"
+            android:showAsAction="never"
+            android:title="Liste senden">
+        </item>
+        <item
+            android:id="@+id/exit"
+            android:menuCategory="secondary"
+            android:showAsAction="ifRoom|withText"
+            android:title="beenden">
+        </item>
+    </group>
+
+</menu>
