@@ -35,7 +35,7 @@
     <artifactId>android-maven-plugin</artifactId>
     <configuration>
      <sdk>
-      <path>/Users/ronnyfriedland/Downloads/adt-bundle-mac-x86_64-20130219/sdk/</path>
+      <!--path>/Users/ronnyfriedland/Downloads/adt-bundle-mac-x86_64-20130219/sdk/</path-->
       <platform>17</platform>
      </sdk>
     </configuration>
