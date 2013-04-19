@@ -73,8 +73,6 @@ public class MainActivity extends Activity {
 		configureListView();
 		configureNewEntryView();
 		configureNewRegistrationView();
-
-		Log.v("lalalala", "" + ShoppingListDataSource.getInstance(getBaseContext()).getList());
 	}
 
 	private void configureNewRegistrationView() {
@@ -218,8 +216,6 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean ret;
 		if (item.getItemId() == R.id.exit) {
-			Log.v("lalalala", "" + ShoppingListDataSource.getInstance(getBaseContext()).getList());
-			
 			ShoppingListDataSource.getInstance(getBaseContext()).close();
 			System.exit(0);
 			ret = true;
