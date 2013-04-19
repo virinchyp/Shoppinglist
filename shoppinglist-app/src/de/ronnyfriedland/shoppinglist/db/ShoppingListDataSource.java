@@ -23,8 +23,10 @@ public class ShoppingListDataSource {
 	private final SQLiteDatabase database;
 
 	public static ShoppingListDataSource getInstance(final Context context) {
-		if (null == datasource) {
-			datasource = new ShoppingListDataSource(context);
+		synchronized (ShoppingListDataSource.class) {
+			if (null == datasource) {
+				datasource = new ShoppingListDataSource(context);
+			}
 		}
 		return datasource;
 	}
@@ -126,12 +128,12 @@ public class ShoppingListDataSource {
 			}
 		}
 	}
-	
+
 	public Shoppinglist getList() {
 		Shoppinglist list = null;
-		Cursor cursor = database.query(Shoppinglist.TABLE, new String[] {
-				Shoppinglist.COL_ID }, null, null,
-				null, null, null);
+		Cursor cursor = database.query(Shoppinglist.TABLE,
+				new String[] { Shoppinglist.COL_ID }, null, null, null, null,
+				null);
 		try {
 			if (cursor.moveToFirst()) {
 				list = new Shoppinglist(cursor.getString(0));

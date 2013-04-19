@@ -3,6 +3,7 @@
     android:id="@+id/main"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:background="@color/background"
     android:orientation="vertical" >
 
     <TabHost
@@ -21,6 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:orientation="horizontal" >
+
             </TabWidget>
 
             <FrameLayout
@@ -38,7 +40,8 @@
                     <ListView
                         android:id="@+id/listViewList"
                         android:layout_width="match_parent"
-                        android:layout_height="fill_parent" >
+                        android:layout_height="match_parent" >
+
                     </ListView>
                 </LinearLayout>
 

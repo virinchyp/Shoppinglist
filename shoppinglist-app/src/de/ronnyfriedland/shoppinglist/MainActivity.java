@@ -74,6 +74,12 @@ public class MainActivity extends Activity {
 		configureNewEntryView();
 		configureNewRegistrationView();
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ShoppingListDataSource.getInstance(getBaseContext()).close();
+	}
 
 	private void configureNewRegistrationView() {
 
@@ -113,16 +119,16 @@ public class MainActivity extends Activity {
 				}
 
 				Entry entry;
-				if(null != uuid) {
-					entry = new Entry(uuid);
-				} else {
+				if(null == uuid || "".equals(uuid)) {
 					entry = new Entry();
+				} else {
+					entry = new Entry(uuid);
 				}
 				entry.setQuantity(new Quantity(quantityValue, quantityUnit));
 				entry.setDescription(description);
 				entry.setList(list);
 
-				if(null == uuid) {
+				if(null == uuid || "".equals(uuid)) {
 					ShoppingListDataSource.getInstance(getBaseContext())
 					.createEntry(entry);
 					((ShoppingListAdapter<Entry>) listView.getAdapter()).add(entry);
@@ -163,12 +169,14 @@ public class MainActivity extends Activity {
 		entries.addAll(ShoppingListDataSource.getInstance(getBaseContext())
 				.getEntries());
 
-		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
+		Log.v("213123123", ""+ entries);
+		
 		ShoppingListAdapter<Entry> myAdapter = new ShoppingListAdapter<Entry>(
 				getBaseContext(),
 				android.R.layout.simple_expandable_list_item_1, entries);
+
 		listView.setAdapter(myAdapter);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		listView.setOnItemClickListener(new ShoppingListClickListener());
 		registerForContextMenu(listView);
 	}
@@ -193,7 +201,7 @@ public class MainActivity extends Activity {
 
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
-		tabHost.addTab(spec3);
+		//tabHost.addTab(spec3);
 	}
 
 	@Override
@@ -216,7 +224,6 @@ public class MainActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean ret;
 		if (item.getItemId() == R.id.exit) {
-			ShoppingListDataSource.getInstance(getBaseContext()).close();
 			System.exit(0);
 			ret = true;
 		} else {
@@ -329,14 +336,15 @@ public class MainActivity extends Activity {
 			ListView list = (ListView) adapterView;
 			TextView textView = (TextView) view;
 
-			Entry value = (Entry) list.getAdapter().getItem(pos);
-			if (Status.OPEN == value.getStatus()) {
+			Entry entry = (Entry) list.getAdapter().getItem(pos);
+			if (Status.OPEN == entry.getStatus()) {
 				UIHelper.toggleStrikeThrough(textView, false);
-				value.setStatus(Status.FINISHED);
+				entry.setStatus(Status.FINISHED);
 			} else {
 				UIHelper.toggleStrikeThrough(textView, true);
-				value.setStatus(Status.OPEN);
+				entry.setStatus(Status.OPEN);
 			}
+			ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);
 		}
 	}
 
