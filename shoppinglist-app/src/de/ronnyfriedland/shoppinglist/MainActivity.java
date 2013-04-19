@@ -80,7 +80,7 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 		ShoppingListDataSource.getInstance(getBaseContext()).close();
 	}
-
+	
 	private void configureNewRegistrationView() {
 
 	}
@@ -168,8 +168,6 @@ public class MainActivity extends Activity {
 		List<Entry> entries = new ArrayList<Entry>();
 		entries.addAll(ShoppingListDataSource.getInstance(getBaseContext())
 				.getEntries());
-
-		Log.v("213123123", ""+ entries);
 		
 		ShoppingListAdapter<Entry> myAdapter = new ShoppingListAdapter<Entry>(
 				getBaseContext(),
