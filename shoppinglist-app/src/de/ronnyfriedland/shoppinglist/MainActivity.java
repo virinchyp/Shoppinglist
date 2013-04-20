@@ -13,7 +13,6 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -30,9 +29,9 @@ import android.widget.TextView;
 import de.ronnyfriedland.shoppinglist.adapter.ShoppingListAdapter;
 import de.ronnyfriedland.shoppinglist.db.ShoppingListDataSource;
 import de.ronnyfriedland.shoppinglist.entity.Entry;
-import de.ronnyfriedland.shoppinglist.entity.Quantity;
 import de.ronnyfriedland.shoppinglist.entity.Shoppinglist;
-import de.ronnyfriedland.shoppinglist.entity.Status;
+import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
+import de.ronnyfriedland.shoppinglist.entity.enums.Status;
 import de.ronnyfriedland.shoppinglist.helper.UIHelper;
 
 /**
@@ -52,6 +51,7 @@ public class MainActivity extends Activity {
 	EditText textDescription;
 	Button saveButton;
 	Button resetButton;
+
 	// tab3
 
 	@Override
@@ -74,13 +74,13 @@ public class MainActivity extends Activity {
 		configureNewEntryView();
 		configureNewRegistrationView();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		ShoppingListDataSource.getInstance(getBaseContext()).close();
 	}
-	
+
 	private void configureNewRegistrationView() {
 
 	}
@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
 				}
 
 				Entry entry;
-				if(null == uuid || "".equals(uuid)) {
+				if (null == uuid || "".equals(uuid)) {
 					entry = new Entry();
 				} else {
 					entry = new Entry(uuid);
@@ -128,16 +128,18 @@ public class MainActivity extends Activity {
 				entry.setDescription(description);
 				entry.setList(list);
 
-				if(null == uuid || "".equals(uuid)) {
+				if (null == uuid || "".equals(uuid)) {
 					ShoppingListDataSource.getInstance(getBaseContext())
-					.createEntry(entry);
-					((ShoppingListAdapter<Entry>) listView.getAdapter()).add(entry);
+							.createEntry(entry);
+					((ShoppingListAdapter<Entry>) listView.getAdapter())
+							.add(entry);
 				} else {
 					ShoppingListDataSource.getInstance(getBaseContext())
-					.updateEntry(entry);
-					((ShoppingListAdapter<Entry>) listView.getAdapter()).update(entry);
+							.updateEntry(entry);
+					((ShoppingListAdapter<Entry>) listView.getAdapter())
+							.update(entry);
 				}
-				
+
 				((ShoppingListAdapter<Entry>) listView.getAdapter())
 						.notifyDataSetChanged();
 
@@ -168,7 +170,7 @@ public class MainActivity extends Activity {
 		List<Entry> entries = new ArrayList<Entry>();
 		entries.addAll(ShoppingListDataSource.getInstance(getBaseContext())
 				.getEntries());
-		
+
 		ShoppingListAdapter<Entry> myAdapter = new ShoppingListAdapter<Entry>(
 				getBaseContext(),
 				android.R.layout.simple_expandable_list_item_1, entries);
@@ -199,7 +201,7 @@ public class MainActivity extends Activity {
 
 		tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
-		//tabHost.addTab(spec3);
+		// tabHost.addTab(spec3);
 	}
 
 	@Override
@@ -221,11 +223,41 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean ret;
-		if (item.getItemId() == R.id.exit) {
+		switch (item.getItemId()) {
+		case R.id.exit:
 			System.exit(0);
 			ret = true;
-		} else {
+			break;
+		case R.id.clearlistItems:
+			Shoppinglist list = ShoppingListDataSource.getInstance(
+					getBaseContext()).getList();
+			ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(
+					list);
+			((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
+			((ShoppingListAdapter<Entry>) listView.getAdapter())
+					.notifyDataSetChanged();
+			ret = true;
+			break;
+		case R.id.clearFinishedItems:
+			for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+				Entry entry = (Entry) listView.getAdapter().getItem(i);
+				if (Status.FINISHED.equals(entry.getStatus())) {
+					Log.d(getClass().getCanonicalName(),
+							String.format("Delete entry with id %s.",
+									entry.getUuid()));
+					ShoppingListDataSource.getInstance(getBaseContext())
+							.deleteEntry(entry);
+					((ShoppingListAdapter<Entry>) listView.getAdapter())
+							.remove(entry);
+					((ShoppingListAdapter<Entry>) listView.getAdapter())
+							.notifyDataSetChanged();
+				}
+			}
+			ret = true;
+			break;
+		default:
 			ret = super.onOptionsItemSelected(item);
+			break;
 		}
 		return ret;
 	}
@@ -248,19 +280,20 @@ public class MainActivity extends Activity {
 		} else if (item.getTitle() == getResources().getString(R.string.edit)) {
 			Log.d(getClass().getCanonicalName(),
 					String.format("Edit entry with id %s.", entry.getUuid()));
-			
+
 			textUuid.setText(entry.getUuid());
 			textDescription.setText(entry.getDescription());
 			seekBar.setProgress(entry.getQuantity().getValue());
 
 			String[] quantity = getResources().getStringArray(R.array.quantity);
-			for(int i=0; i<quantity.length; i++) {
-				if(entry.getQuantity().getUnit().equals(quantity[i])) {
+			for (int i = 0; i < quantity.length; i++) {
+				if (entry.getQuantity().getUnit().equals(quantity[i])) {
 					spinnerQuantity.setSelection(i);
 				}
 			}
-			
-			tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
+
+			tabHost.setCurrentTabByTag(getResources()
+					.getString(R.string.create));
 		} else {
 			return false;
 		}
@@ -342,27 +375,8 @@ public class MainActivity extends Activity {
 				UIHelper.toggleStrikeThrough(textView, true);
 				entry.setStatus(Status.OPEN);
 			}
-			ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);
+			ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(
+					entry);
 		}
 	}
-
-	class ShoppingListMenuListener implements OnMenuItemClickListener {
-
-		@Override
-		public boolean onMenuItemClick(MenuItem item) {
-			if (item.getTitle() == getResources().getString(R.string.clearList)) {
-				return true;
-			} else if (item.getTitle() == getResources().getString(
-					R.string.clearEntries)) {
-				return true;
-			} else if (item.getTitle() == getResources().getString(
-					R.string.syncList)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-	}
-
 }

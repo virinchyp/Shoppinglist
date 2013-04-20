@@ -8,8 +8,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import de.ronnyfriedland.shoppinglist.entity.Entry;
-import de.ronnyfriedland.shoppinglist.entity.Quantity;
 import de.ronnyfriedland.shoppinglist.entity.Shoppinglist;
+import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
 
 /**
  * @author Ronny Friedland
@@ -83,7 +83,7 @@ public class ShoppingListDataSource {
 		List<Entry> entries = new ArrayList<Entry>();
 		Cursor cursor = database.query(Entry.TABLE, new String[] {
 				Entry.COL_ID, Entry.COL_DESCRIPTION, Entry.COL_STATUS,
-				Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY }, null, null,
+				Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_LIST }, null, null,
 				null, null, null);
 		try {
 			if (cursor.moveToFirst()) {
@@ -93,6 +93,7 @@ public class ShoppingListDataSource {
 					entry.setDescription(cursor.getString(1));
 					entry.setQuantity(new Quantity(cursor.getInt(3), cursor
 							.getString(4)));
+					entry.setList(new Shoppinglist(cursor.getString(5)));
 					entries.add(entry);
 				} while (cursor.moveToNext());
 			}
@@ -117,7 +118,21 @@ public class ShoppingListDataSource {
 		}
 	}
 
-	public void createList(final Shoppinglist list) {
+	public void deleteEntry(final Shoppinglist list) {
+		if (null != list) {
+			database.beginTransaction();
+			try {
+				database.delete(Entry.TABLE, Entry.COL_LIST + "=?",
+						new String[] { list.getUuid() });
+				database.setTransactionSuccessful();
+			} finally {
+				database.endTransaction();
+			}
+		}
+	}
+
+	
+	public void deleteList(final Shoppinglist list) {
 		if (null != list) {
 			database.beginTransaction();
 			try {
@@ -146,14 +161,14 @@ public class ShoppingListDataSource {
 		return list;
 	}
 
-	public void updateList(final Shoppinglist list) {
+	public void createList(final Shoppinglist list) {
 		if (null != list) {
 			ContentValues values = new ContentValues();
 			values.put(Shoppinglist.COL_ID, list.getUuid());
 
 			database.beginTransaction();
 			try {
-				database.update(Shoppinglist.TABLE, values, null, null);
+				database.insert(Shoppinglist.TABLE, null, values);
 				database.setTransactionSuccessful();
 			} finally {
 				database.endTransaction();

@@ -2,11 +2,14 @@ package de.ronnyfriedland.shoppinglist.entity;
 
 import java.util.UUID;
 
+import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
+import de.ronnyfriedland.shoppinglist.entity.enums.Status;
+
 /**
  * @author ronnyfriedland
  *
  */
-public class Entry {
+public class Entry extends AbstractEntity {
 
 	public static final String TABLE = "Entry";
 	public static final String COL_ID = "id";
@@ -16,7 +19,6 @@ public class Entry {
 	public static final String COL_STATUS = "status";
 	public static final String COL_LIST = "list";
 	
-	private String uuid;
 	private String description;
 	private Quantity quantity;
 	private Status status;
@@ -27,7 +29,7 @@ public class Entry {
 	}
 
 	public Entry(final String uuid) {
-		this.uuid = uuid;
+		super(uuid);
 		this.status = Status.OPEN;
 	}
 
@@ -42,9 +44,6 @@ public class Entry {
 	}
 	public void setQuantity(Quantity quantity) {
 		this.quantity = quantity;
-	}
-	public String getUuid() {
-		return uuid;
 	}
 	
 	public Status getStatus() {
@@ -65,22 +64,6 @@ public class Entry {
 
 	public void setList(Shoppinglist list) {
 		this.list = list;
-	}
-
-	@Override
-	public int hashCode() {
-		return getUuid().hashCode();
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		boolean equals = false;
-		if(null != o && o instanceof Entry) {
-			if(((Entry)o).getUuid().equals(getUuid())) {
-				equals = true;
-			}
-		}
-		return equals;
 	}
 	
 	@Override

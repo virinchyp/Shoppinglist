@@ -22,7 +22,7 @@ public class ShoppingListSqliteHelper extends SQLiteOpenHelper {
 				+ Entry.COL_LIST + " list not null)");
 		
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "("
-				+ Entry.COL_ID + " text not null)");
+				+ Shoppinglist.COL_ID + " text not null)");
 	}
 
 	@Override

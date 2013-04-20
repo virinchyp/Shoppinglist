@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import de.ronnyfriedland.shoppinglist.entity.Entry;
-import de.ronnyfriedland.shoppinglist.entity.Status;
+import de.ronnyfriedland.shoppinglist.entity.enums.Status;
 import de.ronnyfriedland.shoppinglist.helper.UIHelper;
 
 /**

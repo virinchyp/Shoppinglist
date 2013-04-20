@@ -1,4 +1,4 @@
-package de.ronnyfriedland.shoppinglist.entity;
+package de.ronnyfriedland.shoppinglist.entity.enums;
 
 /**
  * Possible status of the Entry
