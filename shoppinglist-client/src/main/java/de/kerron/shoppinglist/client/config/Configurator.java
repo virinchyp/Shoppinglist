@@ -1,9 +1,6 @@
 package de.kerron.shoppinglist.client.config;
 
-import org.apache.commons.configuration.CompositeConfiguration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.SystemConfiguration;
+import javax.naming.ConfigurationException;
 
 /**
  * Zentrale Konfigurationsklasse.
