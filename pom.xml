@@ -24,7 +24,7 @@
     </configuration>
 </plugin>
 </plugins>
-/build>
+</build>
 
   <dependencyManagement>
   	<dependencies>
