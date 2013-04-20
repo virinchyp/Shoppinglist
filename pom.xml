@@ -12,6 +12,9 @@
   	<module>shoppinglist-server</module>
   	<module>shoppinglist-db</module>
   </modules>
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
   <build>
    <plugins>
 <plugin>
