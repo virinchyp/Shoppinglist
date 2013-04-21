@@ -26,7 +26,7 @@
         <item
             android:id="@+id/exit"
             android:menuCategory="secondary"
-            android:showAsAction="ifRoom|withText"
+            android:showAsAction="ifRoom"
             android:title="@string/exit" android:icon="@android:drawable/ic_lock_power_off">
         </item>
     </group>
