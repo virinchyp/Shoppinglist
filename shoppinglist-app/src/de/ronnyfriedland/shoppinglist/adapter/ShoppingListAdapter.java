@@ -16,75 +16,77 @@ import de.ronnyfriedland.shoppinglist.helper.UIHelper;
 
 /**
  * @author Ronny Friedland
- *
+ * 
  * @param <T>
  */
 public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
 
-	private final List<T> entries = new ArrayList<T>();
+    private final List<T> entries = new ArrayList<T>();
 
-	public ShoppingListAdapter(Context context, int resource, Collection<T> entries) {
-		super(context, resource);
-		addAll(entries);
-	}
+    public ShoppingListAdapter(Context context, int resource, Collection<T> entries) {
+        super(context, resource);
+        addAll(entries);
+    }
 
-	@Override
-	public int getCount() {
-		return entries.size();
-	}
+    @Override
+    public int getCount() {
+        return entries.size();
+    }
 
-	@Override
-	public T getItem(int position) {
-		return entries.get(position);
-	}
+    @Override
+    public T getItem(int position) {
+        return entries.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView view = (TextView) super.getView(position, convertView, parent);
-		Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/karine.ttf");
-		view.setTypeface(tf);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        TextView view = (TextView) super.getView(position, convertView, parent);
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/karine.ttf");
+        view.setTypeface(tf);
 
-		Entry value = (Entry) getItem(position);
-		if (Status.FINISHED == value.getStatus()) {
-			UIHelper.toggleStrikeThrough(view, false);
-		} else {
-			UIHelper.toggleStrikeThrough(view, true);
-		}
+        Entry value = getItem(position);
+        if (Status.FINISHED == value.getStatus()) {
+            UIHelper.toggleStrikeThrough(view, false);
+        } else {
+            UIHelper.toggleStrikeThrough(view, true);
+        }
 
-		return view;
-	}
+        return view;
+    }
 
-	@Override
-	public void addAll(Collection<? extends T> collection) {
-		entries.addAll(collection);
-	}
+    public void addAll(Collection<? extends T> collection) {
+        entries.addAll(collection);
+    }
 
-	public void add(T entry) {
-		entries.add(entry);
-	}
-	
-	public void remove(T entry) {
-		entries.remove(entry);
-	};
+    @Override
+    public void add(T entry) {
+        entries.add(entry);
+    }
 
-	public void update(T entry) {
-		if(null != entry) {
-			for (Entry existingEntry : entries) {
-				if(existingEntry.getUuid().equals(entry.getUuid())) {
-					existingEntry.setDescription(entry.getDescription());
-					existingEntry.setQuantity(entry.getQuantity());
-					break;
-				}
-			}
-		}
-	};
+    @Override
+    public void remove(T entry) {
+        entries.remove(entry);
+    };
 
-	public void clear() {
-		entries.clear();
-	}
+    public void update(T entry) {
+        if (null != entry) {
+            for (Entry existingEntry : entries) {
+                if (existingEntry.getUuid().equals(entry.getUuid())) {
+                    existingEntry.setDescription(entry.getDescription());
+                    existingEntry.setQuantity(entry.getQuantity());
+                    break;
+                }
+            }
+        }
+    };
+
+    @Override
+    public void clear() {
+        entries.clear();
+    }
 }
