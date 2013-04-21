@@ -20,6 +20,8 @@
         <item>Gramm</item>
         <item>Kilogramm</item>
         <item>Liter</item>
+        <item>Milliliter</item>
+        <item>Packung</item>
         <item>Stück</item>
     </string-array>
 

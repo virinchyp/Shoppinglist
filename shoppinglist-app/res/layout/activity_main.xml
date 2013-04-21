@@ -39,8 +39,9 @@
 
                     <ListView
                         android:id="@+id/listViewList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="top" >
 
                     </ListView>
                 </LinearLayout>
