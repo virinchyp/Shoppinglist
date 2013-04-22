@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -49,7 +50,7 @@ public class MainActivity extends Activity {
     EditText textQuantityValue;
     EditText textUuid;
     Spinner spinnerQuantity;
-    EditText textDescription;
+    AutoCompleteTextView textDescription;
     Button saveButton;
     Button resetButton;
 
@@ -63,7 +64,7 @@ public class MainActivity extends Activity {
         saveButton = (Button) findViewById(R.id.buttonSave);
         textQuantityValue = (EditText) findViewById(R.id.textViewQuantityValue);
         spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
-        textDescription = (EditText) findViewById(R.id.autoCompleteTextViewEntryDescription);
+        textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
         listView = (ListView) findViewById(R.id.listViewList);
         tabHost = (TabHost) findViewById(R.id.tabHost);
         resetButton = (Button) findViewById(R.id.buttonReset);
@@ -74,17 +75,16 @@ public class MainActivity extends Activity {
         configureListView();
         configureNewEntryView();
         configureNewRegistrationView();
+
+        initData();
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @see android.app.Activity#onDestroy()
-     */
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShoppingListDataSource.getInstance(getBaseContext()).close();
+    private void initData() {
+        Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
+        if (null == list) {
+            list = new Shoppinglist();
+            ShoppingListDataSource.getInstance(getBaseContext()).createList(list);
+        }
     }
 
     private void configureNewRegistrationView() {
@@ -93,6 +93,7 @@ public class MainActivity extends Activity {
 
     private void configureNewEntryView() {
         seekBar.setOnSeekBarChangeListener(new ShoppingListSeekBarListener());
+        seekBar.setProgress(0);
 
         // Create an ArrayAdapter using the string array and a default spinner
         // layout
@@ -104,6 +105,7 @@ public class MainActivity extends Activity {
         spinnerQuantity.setAdapter(adapter);
 
         textQuantityValue.addTextChangedListener(new ShoppingListTextWatcher());
+        textQuantityValue.setText("0");
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -113,10 +115,6 @@ public class MainActivity extends Activity {
                 String description = textDescription.getText().toString();
 
                 Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
-                if (null == list) {
-                    list = new Shoppinglist();
-                    ShoppingListDataSource.getInstance(getBaseContext()).createList(list);
-                }
 
                 Entry entry;
                 if (null == uuid || "".equals(uuid)) {
@@ -208,6 +206,17 @@ public class MainActivity extends Activity {
     /**
      * {@inheritDoc}
      * 
+     * @see android.app.Activity#onDestroy()
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShoppingListDataSource.getInstance(getBaseContext()).close();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
      * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu,
      *      android.view.View, android.view.ContextMenu.ContextMenuInfo)
      */
@@ -232,14 +241,16 @@ public class MainActivity extends Activity {
             System.exit(0);
             ret = true;
             break;
-        case R.id.clearlistItems:
+        case R.id.clearlistItems: {
             Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
             ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
+            ShoppingListDataSource.getInstance(getBaseContext()).deleteList(list);
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
             ret = true;
+        }
             break;
-        case R.id.clearFinishedItems:
+        case R.id.clearFinishedItems: {
             List<Entry> entries = new ArrayList<Entry>();
             for (int i = 0; i < listView.getAdapter().getCount(); i++) {
                 Entry entry = (Entry) listView.getAdapter().getItem(i);
@@ -250,10 +261,15 @@ public class MainActivity extends Activity {
                     entries.add(entry);
                 }
             }
+            if (0 == entries.size()) {
+                Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
+                ShoppingListDataSource.getInstance(getBaseContext()).deleteList(list);
+            }
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
             ret = true;
+        }
             break;
         default:
             ret = super.onOptionsItemSelected(item);
