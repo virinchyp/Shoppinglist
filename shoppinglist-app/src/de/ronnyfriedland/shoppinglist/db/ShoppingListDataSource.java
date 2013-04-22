@@ -21,8 +21,13 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
     private static final Integer SHOPPINGLIST_DB_VERSION = 1;
     private static ShoppingListDataSource datasource = null;
 
-    // private final SQLiteDatabase database;
-
+    /**
+     * Return the (single) instance of {@link ShoppingListDataSource}.
+     * 
+     * @param context
+     *            the base context of the app
+     * @return instance of {@link ShoppingListDataSource}
+     */
     public static ShoppingListDataSource getInstance(final Context context) {
         synchronized (ShoppingListDataSource.class) {
             if (null == datasource) {
@@ -32,6 +37,11 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         return datasource;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Entry.TABLE + "(" + Entry.COL_ID + " text primary key, "
@@ -42,6 +52,12 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "(" + Shoppinglist.COL_ID + " text not null)");
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase,
+     *      int, int)
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
@@ -59,6 +75,12 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         // .getReadableDatabase();
     }
 
+    /**
+     * Creates a new {@link Entry}.
+     * 
+     * @param entry
+     *            the entry to persist
+     */
     public void createEntry(final Entry entry) {
         if (null != entry) {
             ContentValues values = new ContentValues();
@@ -81,6 +103,12 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Updates the given entry based on the uuid.
+     * 
+     * @param entry
+     *            the {@link Entry} to update
+     */
     public void updateEntry(final Entry entry) {
         if (null != entry) {
             ContentValues values = new ContentValues();
@@ -101,6 +129,11 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Retrieves a list of {@link Entry} stored in the database
+     * 
+     * @return list of all entries
+     */
     public List<Entry> getEntries() {
         List<Entry> entries = new ArrayList<Entry>();
         SQLiteDatabase database = getReadableDatabase();
@@ -127,6 +160,12 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         return entries;
     }
 
+    /**
+     * Deletes the given {@link Entry}.
+     * 
+     * @param entry
+     *            the {@link Entry} to delete
+     */
     public void deleteEntry(final Entry entry) {
         if (null != entry) {
             SQLiteDatabase database = getWritableDatabase();
@@ -141,6 +180,13 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Deletes every {@link Entry} which is associated to the given
+     * {@link Shoppinglist}.
+     * 
+     * @param list
+     *            the associated {@link Shoppinglist}.
+     */
     public void deleteEntry(final Shoppinglist list) {
         if (null != list) {
             SQLiteDatabase database = getWritableDatabase();
@@ -155,6 +201,12 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Deletes the {@link Shoppinglist} given as parameter.
+     * 
+     * @param list
+     *            the {@link Shoppinglist} to delete
+     */
     public void deleteList(final Shoppinglist list) {
         if (null != list) {
             SQLiteDatabase database = getWritableDatabase();
@@ -169,6 +221,11 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Retrieves the current {@link Shoppinglist}.
+     * 
+     * @return the current {@link Shoppinglist}
+     */
     public Shoppinglist getList() {
         Shoppinglist list = null;
         SQLiteDatabase database = getReadableDatabase();
@@ -187,6 +244,12 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         return list;
     }
 
+    /**
+     * Creates a new {@link Shoppinglist}.
+     * 
+     * @param list
+     *            the {@link Shoppinglist} to create
+     */
     public void createList(final Shoppinglist list) {
         if (null != list) {
             ContentValues values = new ContentValues();

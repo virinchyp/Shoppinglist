@@ -3,19 +3,30 @@ package de.ronnyfriedland.shoppinglist.entity;
 import java.util.UUID;
 
 /**
- * @author ronnyfriedland
+ * Entity to represent a shopping list. Every {@link Entry} is associated to a
+ * {@link Shoppinglist}.
  * 
+ * @author Ronnyf Friedland
  */
 public class Shoppinglist extends AbstractEntity {
 
-	public static final String TABLE = "List";
-	public static final String COL_ID = "id";
+    public static final String TABLE = "List";
+    public static final String COL_ID = "id";
 
-	public Shoppinglist(final String uuid) {
-		super(uuid);
-	}
+    /**
+     * Creates an new {@link Shoppinglist} instance.
+     * 
+     * @param uuid
+     *            the initial {@link #uuid}
+     */
+    public Shoppinglist(final String uuid) {
+        super(uuid);
+    }
 
-	public Shoppinglist() {
-		this(UUID.randomUUID().toString());
-	}
+    /**
+     * Creates a new {@link Shoppinglist}.
+     */
+    public Shoppinglist() {
+        this(UUID.randomUUID().toString());
+    }
 }

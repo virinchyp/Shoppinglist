@@ -23,26 +23,57 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
 
     private final List<T> entries = new ArrayList<T>();
 
+    /**
+     * Creates a new {@link ShoppingListAdapter}
+     * 
+     * @param context
+     *            the base context
+     * @param resource
+     *            the resource
+     * @param entries
+     *            inital list of entries
+     */
     public ShoppingListAdapter(Context context, int resource, Collection<T> entries) {
         super(context, resource);
         addAll(entries);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#getCount()
+     */
     @Override
     public int getCount() {
         return entries.size();
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#getItem(int)
+     */
     @Override
     public T getItem(int position) {
         return entries.get(position);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#getItemId(int)
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#getView(int, android.view.View,
+     *      android.view.ViewGroup)
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView view = (TextView) super.getView(position, convertView, parent);
@@ -59,20 +90,41 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
         return view;
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#addAll(java.util.Collection)
+     */
     public void addAll(Collection<? extends T> collection) {
         entries.addAll(collection);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#add(java.lang.Object)
+     */
     @Override
     public void add(T entry) {
         entries.add(entry);
     }
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#remove(java.lang.Object)
+     */
     @Override
     public void remove(T entry) {
         entries.remove(entry);
     };
 
+    /**
+     * Update the given entry in the list.
+     * 
+     * @param entry
+     *            the list entry to update
+     */
     public void update(T entry) {
         if (null != entry) {
             for (Entry existingEntry : entries) {
@@ -85,6 +137,11 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
         }
     };
 
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#clear()
+     */
     @Override
     public void clear() {
         entries.clear();
