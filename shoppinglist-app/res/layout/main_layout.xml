@@ -1,133 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabHost"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
     android:background="@color/background"
     android:orientation="vertical" >
 
-    <TabHost
-        android:id="@+id/tabHost"
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
-        <RelativeLayout
+        <TabWidget
+            android:id="@android:id/tabs"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        </TabWidget>
 
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
-            </TabWidget>
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" >
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="fill_parent"
-                android:layout_height="410dp" >
+            <LinearLayout
+                android:id="@+id/tab1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
 
-                <LinearLayout
-                    android:id="@+id/tab1"
+                <ListView
+                    android:id="@+id/listViewList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="60dp" >
+                    android:layout_gravity="top" >
+                </ListView>
+            </LinearLayout>
 
-                    <ListView
-                        android:id="@+id/listViewList"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="top" >
-                    </ListView>
-                </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/tab2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
 
-                <RelativeLayout
-                    android:id="@+id/tab2"
+                <SeekBar
+                    android:id="@+id/seekBarQuantityValue"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="60dp" >
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="0dp"
+                    android:max="1000"
+                    android:minHeight="20dip" />
 
-                    <SeekBar
-                        android:id="@+id/seekBarQuantityValue"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="0dp"
-                        android:max="1000"
-                        android:minHeight="20dip" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/seekBarQuantityValue"
-                        android:layout_below="@+id/textViewQuantityValue"
-                        android:layout_marginTop="20dp" >
-
-                        <requestFocus />
-                    </AutoCompleteTextView>
-
-                    <Button
-                        android:id="@+id/buttonSave"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_below="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/save" />
-
-                    <Button
-                        android:id="@+id/buttonReset"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/buttonSave"
-                        android:layout_alignBottom="@+id/buttonSave"
-                        android:layout_alignRight="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/reset" />
-
-                    <EditText
-                        android:id="@+id/textViewQuantityValue"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_below="@+id/seekBarQuantityValue"
-                        android:layout_marginTop="20dp"
-                        android:inputType="numberDecimal" />
-
-                    <EditText
-                        android:id="@+id/textViewUuid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:visibility="invisible" />
-
-                    <Spinner
-                        android:id="@+id/spinnerQuantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_above="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_alignParentRight="true" />
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/tab3"
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewEntryDescription"
                     android:layout_width="fill_parent"
-                    android:layout_height="364dp"
-                    android:orientation="vertical"
-                    android:paddingTop="60dp"
-                    android:visibility="invisible" >
-                </LinearLayout>
-            </FrameLayout>
-        </RelativeLayout>
-    </TabHost>
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/seekBarQuantityValue"
+                    android:layout_below="@+id/textViewQuantityValue"
+                    android:layout_marginTop="20dp" >
 
-</RelativeLayout>
+                    <requestFocus />
+                </AutoCompleteTextView>
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_below="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/save" />
+
+                <Button
+                    android:id="@+id/buttonReset"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/buttonSave"
+                    android:layout_alignBottom="@+id/buttonSave"
+                    android:layout_alignRight="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/reset" />
+
+                <EditText
+                    android:id="@+id/textViewQuantityValue"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/seekBarQuantityValue"
+                    android:layout_marginTop="20dp"
+                    android:inputType="numberDecimal" />
+
+                <EditText
+                    android:id="@+id/textViewUuid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:visibility="invisible" />
+
+                <Spinner
+                    android:id="@+id/spinnerQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_alignParentRight="true" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/tab3"
+                android:layout_width="fill_parent"
+                android:layout_height="364dp"
+                android:orientation="vertical"
+                android:paddingTop="60dp"
+                android:visibility="invisible" >
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+</TabHost>

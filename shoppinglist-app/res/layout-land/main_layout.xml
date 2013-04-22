@@ -1,132 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tabHost"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="fill_parent"
+    android:layout_alignParentLeft="true"
     android:background="@color/background"
     android:orientation="vertical">
 
-    <TabHost
-        android:id="@+id/tabHost"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true" >
+        android:layout_height="fill_parent" >
 
-        <RelativeLayout
+        <TabWidget
+            android:id="@android:id/tabs"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
-            <TabWidget
-                android:id="@android:id/tabs"
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" >
+
+            <LinearLayout
+                android:id="@+id/tab1"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
+                <ListView
+                    android:id="@+id/listViewList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+                </ListView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/tab2"
                 android:layout_width="fill_parent"
-                android:layout_height="410dp" >
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
 
-                <RelativeLayout
-                    android:id="@+id/tab2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="60dp" >
+                <EditText
+                    android:id="@+id/textViewUuid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:visibility="invisible" />
 
-                    <EditText
-                        android:id="@+id/textViewUuid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:visibility="invisible" />
+                <SeekBar
+                    android:id="@+id/seekBarQuantityValue"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/textViewUuid"
+                    android:layout_toRightOf="@+id/textViewUuid"
+                    android:max="1000"
+                    android:minHeight="20dip" />
 
-                    <SeekBar
-                        android:id="@+id/seekBarQuantityValue"
-                        android:layout_width="280dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/textViewUuid"
-                        android:layout_toRightOf="@+id/textViewUuid"
-                        android:max="1000"
-                        android:minHeight="20dip" />
+                <EditText
+                    android:id="@+id/textViewQuantityValue"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/seekBarQuantityValue"
+                    android:layout_marginRight="28dp"
+                    android:ems="10"
+                    android:inputType="numberDecimal" />
 
-                    <EditText
-                        android:id="@+id/textViewQuantityValue"
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignTop="@+id/seekBarQuantityValue"
-                        android:layout_marginRight="28dp"
-                        android:ems="10"
-                        android:inputType="numberDecimal" />
+                <Button
+                    android:id="@+id/buttonSave"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="29dp"
+                    android:layout_toRightOf="@+id/textViewUuid"
+                    android:text="@string/save" />
 
-                    <Button
-                        android:id="@+id/buttonSave"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="29dp"
-                        android:layout_toRightOf="@+id/textViewUuid"
-                        android:text="@string/save" />
+                <Button
+                    android:id="@+id/buttonReset"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/buttonSave"
+                    android:layout_alignBottom="@+id/buttonSave"
+                    android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@+id/buttonSave"
+                    android:text="@string/reset" />
 
-                    <Button
-                        android:id="@+id/buttonReset"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/buttonSave"
-                        android:layout_alignBottom="@+id/buttonSave"
-                        android:layout_marginLeft="25dp"
-                        android:layout_toRightOf="@+id/buttonSave"
-                        android:text="@string/reset" />
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/seekBarQuantityValue"
+                    android:layout_centerVertical="true"
+                    android:ems="10" >
 
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_width="280dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/seekBarQuantityValue"
-                        android:layout_centerVertical="true"
-                        android:ems="10" >
+                    <requestFocus />
+                </AutoCompleteTextView>
 
-                        <requestFocus />
-                    </AutoCompleteTextView>
+                <Spinner
+                    android:id="@+id/spinnerQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_alignLeft="@+id/textViewQuantityValue"
+                    android:layout_marginLeft="21dp" />
+            </RelativeLayout>
 
-                    <Spinner
-                        android:id="@+id/spinnerQuantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/autoCompleteTextViewEntryDescription"
-                        android:layout_alignLeft="@+id/textViewQuantityValue"
-                        android:layout_marginLeft="21dp" />
+            <LinearLayout
+                android:id="@+id/tab3"
+                android:layout_width="fill_parent"
+                android:layout_height="364dp"
+                android:orientation="vertical"
+                android:paddingTop="60dp"
+                android:visibility="invisible" >
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
 
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:id="@+id/tab1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="60dp" >
-
-                    <ListView
-                        android:id="@+id/listViewList"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" >
-                    </ListView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tab3"
-                    android:layout_width="fill_parent"
-                    android:layout_height="364dp"
-                    android:orientation="vertical"
-                    android:paddingTop="60dp"
-                    android:visibility="invisible" >
-                </LinearLayout>
-            </FrameLayout>
-        </RelativeLayout>
-    </TabHost>
-
-</RelativeLayout>
+</TabHost>
