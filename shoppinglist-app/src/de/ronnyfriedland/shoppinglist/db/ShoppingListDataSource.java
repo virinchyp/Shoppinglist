@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import de.ronnyfriedland.shoppinglist.entity.Entry;
 import de.ronnyfriedland.shoppinglist.entity.Shoppinglist;
 import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
@@ -14,171 +15,192 @@ import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
 /**
  * @author Ronny Friedland
  */
-public class ShoppingListDataSource {
+public class ShoppingListDataSource extends SQLiteOpenHelper {
 
-	private static final String SHOPPINGLIST_DB_NAME = "shoppinglist.db";
-	private static final Integer SHOPPINGLIST_DB_VERSION = 1;
-	private static ShoppingListDataSource datasource = null;
+    private static final String SHOPPINGLIST_DB_NAME = "shoppinglist.db";
+    private static final Integer SHOPPINGLIST_DB_VERSION = 1;
+    private static ShoppingListDataSource datasource = null;
 
-	private final SQLiteDatabase database;
+    // private final SQLiteDatabase database;
 
-	public static ShoppingListDataSource getInstance(final Context context) {
-		synchronized (ShoppingListDataSource.class) {
-			if (null == datasource) {
-				datasource = new ShoppingListDataSource(context);
-			}
-		}
-		return datasource;
-	}
+    public static ShoppingListDataSource getInstance(final Context context) {
+        synchronized (ShoppingListDataSource.class) {
+            if (null == datasource) {
+                datasource = new ShoppingListDataSource(context);
+            }
+        }
+        return datasource;
+    }
 
-	private ShoppingListDataSource(final Context context) {
-		SQLiteDatabase.openDatabase(context.getFilesDir().getPath() + "/"
-				+ SHOPPINGLIST_DB_NAME, null,
-				SQLiteDatabase.CREATE_IF_NECESSARY);
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + Entry.TABLE + "(" + Entry.COL_ID + " text primary key, "
+                + Entry.COL_DESCRIPTION + " text not null," + Entry.COL_STATUS + " text not null, "
+                + Entry.COL_QUANTITYVALUE + " integer not null, " + Entry.COL_QUANTITY + " text not null,"
+                + Entry.COL_LIST + " list not null)");
 
-		database = new ShoppingListSqliteHelper(context, SHOPPINGLIST_DB_NAME,
-				SHOPPINGLIST_DB_VERSION).getReadableDatabase();
-	}
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "(" + Shoppinglist.COL_ID + " text not null)");
+    }
 
-	public void createEntry(final Entry entry) {
-		if (null != entry) {
-			ContentValues values = new ContentValues();
-			values.put(Entry.COL_ID, entry.getUuid());
-			values.put(Entry.COL_DESCRIPTION, entry.getDescription());
-			values.put(Entry.COL_STATUS, entry.getStatus().name());
-			values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
-			values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
-			values.put(Entry.COL_LIST, entry.getList().getUuid());
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // TODO Auto-generated method stub
+    }
 
-			database.beginTransaction();
-			try {
-				database.insert(Entry.TABLE, null, values);
-				database.setTransactionSuccessful();
-			} finally {
-				database.endTransaction();
-			}
-		}
-	}
+    private ShoppingListDataSource(final Context context) {
+        super(context, SHOPPINGLIST_DB_NAME, null, SHOPPINGLIST_DB_VERSION);
+        // SQLiteDatabase db =
+        // SQLiteDatabase.openDatabase(context.getFilesDir().getPath() + "/" +
+        // SHOPPINGLIST_DB_NAME,
+        // null, SQLiteDatabase.CREATE_IF_NECESSARY);
+        //
+        // database = new ShoppingListSqliteHelper(context,
+        // SHOPPINGLIST_DB_NAME, SHOPPINGLIST_DB_VERSION)
+        // .getReadableDatabase();
+    }
 
-	public void updateEntry(final Entry entry) {
-		if (null != entry) {
-			ContentValues values = new ContentValues();
-			values.put(Entry.COL_DESCRIPTION, entry.getDescription());
-			values.put(Entry.COL_STATUS, entry.getStatus().name());
-			values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
-			values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
+    public void createEntry(final Entry entry) {
+        if (null != entry) {
+            ContentValues values = new ContentValues();
+            values.put(Entry.COL_ID, entry.getUuid());
+            values.put(Entry.COL_DESCRIPTION, entry.getDescription());
+            values.put(Entry.COL_STATUS, entry.getStatus().name());
+            values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
+            values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
+            values.put(Entry.COL_LIST, entry.getList().getUuid());
 
-			database.beginTransaction();
-			try {
-				database.update(Entry.TABLE, values, Entry.COL_ID + "=?",
-						new String[] { entry.getUuid() });
-				database.setTransactionSuccessful();
-			} finally {
-				database.endTransaction();
-			}
-		}
-	}
+            SQLiteDatabase database = getWritableDatabase();
+            database.beginTransaction();
+            try {
+                database.insert(Entry.TABLE, null, values);
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+                database.close();
+            }
+        }
+    }
 
-	public List<Entry> getEntries() {
-		List<Entry> entries = new ArrayList<Entry>();
-		Cursor cursor = database.query(Entry.TABLE, new String[] {
-				Entry.COL_ID, Entry.COL_DESCRIPTION, Entry.COL_STATUS,
-				Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_LIST }, null, null,
-				null, null, null);
-		try {
-			if (cursor.moveToFirst()) {
-				do {
-					Entry entry = new Entry(cursor.getString(0));
-					entry.setStatus(cursor.getString(2));
-					entry.setDescription(cursor.getString(1));
-					entry.setQuantity(new Quantity(cursor.getInt(3), cursor
-							.getString(4)));
-					entry.setList(new Shoppinglist(cursor.getString(5)));
-					entries.add(entry);
-				} while (cursor.moveToNext());
-			}
-		} finally {
-			if (cursor != null && !cursor.isClosed()) {
-				cursor.close();
-			}
-		}
-		return entries;
-	}
+    public void updateEntry(final Entry entry) {
+        if (null != entry) {
+            ContentValues values = new ContentValues();
+            values.put(Entry.COL_DESCRIPTION, entry.getDescription());
+            values.put(Entry.COL_STATUS, entry.getStatus().name());
+            values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
+            values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
 
-	public void deleteEntry(final Entry entry) {
-		if (null != entry) {
-			database.beginTransaction();
-			try {
-				database.delete(Entry.TABLE, Entry.COL_ID + "=?",
-						new String[] { entry.getUuid() });
-				database.setTransactionSuccessful();
-			} finally {
-				database.endTransaction();
-			}
-		}
-	}
+            SQLiteDatabase database = getWritableDatabase();
+            database.beginTransaction();
+            try {
+                database.update(Entry.TABLE, values, Entry.COL_ID + "=?", new String[] { entry.getUuid() });
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+                database.close();
+            }
+        }
+    }
 
-	public void deleteEntry(final Shoppinglist list) {
-		if (null != list) {
-			database.beginTransaction();
-			try {
-				database.delete(Entry.TABLE, Entry.COL_LIST + "=?",
-						new String[] { list.getUuid() });
-				database.setTransactionSuccessful();
-			} finally {
-				database.endTransaction();
-			}
-		}
-	}
+    public List<Entry> getEntries() {
+        List<Entry> entries = new ArrayList<Entry>();
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.query(Entry.TABLE, new String[] { Entry.COL_ID, Entry.COL_DESCRIPTION,
+                Entry.COL_STATUS, Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_LIST }, null, null, null,
+                null, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    Entry entry = new Entry(cursor.getString(0));
+                    entry.setStatus(cursor.getString(2));
+                    entry.setDescription(cursor.getString(1));
+                    entry.setQuantity(new Quantity(cursor.getInt(3), cursor.getString(4)));
+                    entry.setList(new Shoppinglist(cursor.getString(5)));
+                    entries.add(entry);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            database.close();
+        }
+        return entries;
+    }
 
-	
-	public void deleteList(final Shoppinglist list) {
-		if (null != list) {
-			database.beginTransaction();
-			try {
-				database.delete(Shoppinglist.TABLE, null, null);
-				database.setTransactionSuccessful();
-			} finally {
-				database.endTransaction();
-			}
-		}
-	}
+    public void deleteEntry(final Entry entry) {
+        if (null != entry) {
+            SQLiteDatabase database = getWritableDatabase();
+            database.beginTransaction();
+            try {
+                database.delete(Entry.TABLE, Entry.COL_ID + "=?", new String[] { entry.getUuid() });
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+                database.close();
+            }
+        }
+    }
 
-	public Shoppinglist getList() {
-		Shoppinglist list = null;
-		Cursor cursor = database.query(Shoppinglist.TABLE,
-				new String[] { Shoppinglist.COL_ID }, null, null, null, null,
-				null);
-		try {
-			if (cursor.moveToFirst()) {
-				list = new Shoppinglist(cursor.getString(0));
-			}
-		} finally {
-			if (cursor != null && !cursor.isClosed()) {
-				cursor.close();
-			}
-		}
-		return list;
-	}
+    public void deleteEntry(final Shoppinglist list) {
+        if (null != list) {
+            SQLiteDatabase database = getWritableDatabase();
+            database.beginTransaction();
+            try {
+                database.delete(Entry.TABLE, Entry.COL_LIST + "=?", new String[] { list.getUuid() });
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+                database.close();
+            }
+        }
+    }
 
-	public void createList(final Shoppinglist list) {
-		if (null != list) {
-			ContentValues values = new ContentValues();
-			values.put(Shoppinglist.COL_ID, list.getUuid());
+    public void deleteList(final Shoppinglist list) {
+        if (null != list) {
+            SQLiteDatabase database = getWritableDatabase();
+            database.beginTransaction();
+            try {
+                database.delete(Shoppinglist.TABLE, null, null);
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+                database.close();
+            }
+        }
+    }
 
-			database.beginTransaction();
-			try {
-				database.insert(Shoppinglist.TABLE, null, values);
-				database.setTransactionSuccessful();
-			} finally {
-				database.endTransaction();
-			}
-		}
-	}
+    public Shoppinglist getList() {
+        Shoppinglist list = null;
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.query(Shoppinglist.TABLE, new String[] { Shoppinglist.COL_ID }, null, null, null,
+                null, null);
+        try {
+            if (cursor.moveToFirst()) {
+                list = new Shoppinglist(cursor.getString(0));
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            database.close();
+        }
+        return list;
+    }
 
-	public void close() {
-		if (null != database) {
-			database.close();
-		}
-	}
+    public void createList(final Shoppinglist list) {
+        if (null != list) {
+            ContentValues values = new ContentValues();
+            values.put(Shoppinglist.COL_ID, list.getUuid());
+
+            SQLiteDatabase database = getWritableDatabase();
+            database.beginTransaction();
+            try {
+                database.insert(Shoppinglist.TABLE, null, values);
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+                database.close();
+            }
+        }
+    }
 }
