@@ -1,0 +1,177 @@
+<class-diagram version="1.0.9" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" 
+    name="de.ronnyfriedland.shoppinglist.MainActivity.ShoppingListSeekBarListener" project="shoppinglist-app" 
+    file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/MainActivity.java" binary="false">    
+    <position height="-1" width="-1" x="654" y="290"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" 
+    name="de.ronnyfriedland.shoppinglist.MainActivity.ShoppingListClickListener" project="shoppinglist-app" 
+    file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/MainActivity.java" binary="false">    
+    <position height="-1" width="-1" x="664" y="-14"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" 
+    name="de.ronnyfriedland.shoppinglist.MainActivity.ShoppingListTextWatcher" project="shoppinglist-app" 
+    file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/MainActivity.java" binary="false">    
+    <position height="-1" width="-1" x="659" y="133"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.MainActivity" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/MainActivity.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="235" y="144"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.adapter.ShoppingListAdapter" 
+    project="shoppinglist-app" 
+    file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/adapter/ShoppingListAdapter.java" binary="false">    
+    <position height="-1" width="-1" x="672" y="606"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.db.ShoppingListDataSource" 
+    project="shoppinglist-app" 
+    file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/db/ShoppingListDataSource.java" binary="false">    
+    <position height="-1" width="-1" x="184" y="784"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.entity.AbstractEntity" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/entity/AbstractEntity.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1132" y="250"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.entity.Entry" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/entity/Entry.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1020" y="606"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.entity.Shoppinglist" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/entity/Shoppinglist.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1260" y="587"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.entity.enums.Quantity" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/entity/enums/Quantity.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="774" y="902"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="11" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.entity.enums.Status" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/entity/enums/Status.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1200" y="905"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="de.ronnyfriedland.shoppinglist.helper.UIHelper" 
+    project="shoppinglist-app" file="/shoppinglist-app/src/de/ronnyfriedland/shoppinglist/helper/UIHelper.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="1142" y="36"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <generalization id="13">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <association id="14">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="15" name="status"/>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="18" name="list"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="21" name="entries"/>      
+      <multiplicity id="22" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="23">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="24" name="quantity"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="7"/>  
+  </generalization>  
+  <nesting id="27">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="3"/>  
+  </nesting>  
+  <nesting id="28">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </nesting>  
+  <nesting id="29">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </nesting>  
+  <association id="30">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="31" name="datasource"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
