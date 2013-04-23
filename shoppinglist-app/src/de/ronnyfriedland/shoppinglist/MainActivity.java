@@ -25,6 +25,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import de.ronnyfriedland.shoppinglist.adapter.ShoppingListAdapter;
@@ -76,15 +77,25 @@ public class MainActivity extends Activity {
         configureNewEntryView();
         configureNewRegistrationView();
 
-        initData();
+        initListTabData();
+        initCreateTabData("", 1, 0, "");
     }
 
-    private void initData() {
+    private void initListTabData() {
         Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
         if (null == list) {
             list = new Shoppinglist();
             ShoppingListDataSource.getInstance(getBaseContext()).createList(list);
         }
+    }
+
+    private void initCreateTabData(final String uuid, final int quantity, final int quantityUnitRes,
+            final String description) {
+        textUuid.setText(uuid);
+        spinnerQuantity.setSelection(quantityUnitRes);
+        textDescription.setText(description);
+        seekBar.setProgress(quantity);
+        textQuantityValue.setText(String.valueOf(quantity));
     }
 
     private void configureNewRegistrationView() {
@@ -93,7 +104,6 @@ public class MainActivity extends Activity {
 
     private void configureNewEntryView() {
         seekBar.setOnSeekBarChangeListener(new ShoppingListSeekBarListener());
-        seekBar.setProgress(0);
 
         // Create an ArrayAdapter using the string array and a default spinner
         // layout
@@ -105,7 +115,6 @@ public class MainActivity extends Activity {
         spinnerQuantity.setAdapter(adapter);
 
         textQuantityValue.addTextChangedListener(new ShoppingListTextWatcher());
-        textQuantityValue.setText("0");
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -136,23 +145,13 @@ public class MainActivity extends Activity {
 
                 ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
 
-                textUuid.setText("");
-                spinnerQuantity.setSelection(0);
-                textDescription.setText("");
-                seekBar.setProgress(0);
-                textQuantityValue.setText("");
-
                 tabHost.setCurrentTabByTag(getResources().getString(R.string.list));
             }
         });
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                textUuid.setText("");
-                spinnerQuantity.setSelection(0);
-                textDescription.setText("");
-                seekBar.setProgress(0);
-                textQuantityValue.setText("");
+                initCreateTabData("", 1, 0, "");
             }
         });
 
@@ -173,6 +172,21 @@ public class MainActivity extends Activity {
 
     private void configureTabs() {
         tabHost.setup();
+        tabHost.setOnTabChangedListener(new OnTabChangeListener() {
+
+            /**
+             * {@inheritDoc}
+             * 
+             * @see android.widget.TabHost.OnTabChangeListener#onTabChanged(java.lang.String)
+             */
+            @Override
+            public void onTabChanged(String arg0) {
+                if (getResources().getString(R.string.list).equals(arg0)) {
+                    initCreateTabData("", 1, 0, "");
+                }
+            }
+
+        });
 
         TabSpec spec1 = tabHost.newTabSpec(getResources().getString(R.string.list));
         spec1.setContent(R.id.tab1);
@@ -295,16 +309,15 @@ public class MainActivity extends Activity {
         } else if (item.getTitle() == getResources().getString(R.string.edit)) {
             Log.d(getClass().getCanonicalName(), String.format("Edit entry with id %s.", entry.getUuid()));
 
-            textUuid.setText(entry.getUuid());
-            textDescription.setText(entry.getDescription());
-            seekBar.setProgress(entry.getQuantity().getValue());
-
+            int quantityUnitRes = 0;
             String[] quantity = getResources().getStringArray(R.array.quantity);
             for (int i = 0; i < quantity.length; i++) {
                 if (entry.getQuantity().getUnit().equals(quantity[i])) {
-                    spinnerQuantity.setSelection(i);
+                    quantityUnitRes = i;
                 }
             }
+
+            initCreateTabData(entry.getUuid(), entry.getQuantity().getValue(), quantityUnitRes, entry.getDescription());
 
             tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
         } else {
@@ -392,7 +405,8 @@ public class MainActivity extends Activity {
             try {
                 seekBar.setProgress(Integer.parseInt(arg0.toString()));
             } catch (NumberFormatException e) {
-                seekBar.setProgress(0);
+                seekBar.setProgress(1);
+                textQuantityValue.setText("1");
             }
         }
 

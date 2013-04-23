@@ -16,6 +16,7 @@
     <string name="syncList">Liste synchronisieren</string>
     
     <string-array name="quantity">
+        <item></item>
         <item>Flasche</item>
         <item>Gramm</item>
         <item>Kilogramm</item>

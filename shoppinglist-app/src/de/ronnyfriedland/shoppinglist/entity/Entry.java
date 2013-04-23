@@ -88,7 +88,9 @@ public class Entry extends AbstractEntity {
     public String toString() {
         StringBuilder sbuild = new StringBuilder();
         sbuild.append(getQuantity().getValue()).append(" ");
-        sbuild.append(getQuantity().getUnit()).append(" ");
+        if (!(null == getQuantity().getUnit() || "".equals(getQuantity().getUnit()))) {
+            sbuild.append(getQuantity().getUnit()).append(" ");
+        }
         sbuild.append(getDescription());
         return sbuild.toString();
     }
