@@ -87,6 +87,9 @@ public class MainActivity extends Activity {
             list = new Shoppinglist();
             ShoppingListDataSource.getInstance(getBaseContext()).createList(list);
         }
+        List<Entry> entries = new ArrayList<Entry>();
+        entries.addAll(ShoppingListDataSource.getInstance(getBaseContext()).getEntries());
+        ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
     }
 
     private void initCreateTabData(final String uuid, final int quantity, final int quantityUnitRes,
@@ -158,12 +161,8 @@ public class MainActivity extends Activity {
     }
 
     private void configureListView() {
-        List<Entry> entries = new ArrayList<Entry>();
-        entries.addAll(ShoppingListDataSource.getInstance(getBaseContext()).getEntries());
-
         ShoppingListAdapter<Entry> myAdapter = new ShoppingListAdapter<Entry>(getBaseContext(),
-                android.R.layout.simple_expandable_list_item_1, entries);
-
+                android.R.layout.simple_expandable_list_item_1);
         listView.setAdapter(myAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(new ShoppingListClickListener());
