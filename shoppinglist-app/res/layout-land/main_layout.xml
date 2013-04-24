@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:layout_alignParentLeft="true"
     android:background="@color/background"
-    android:orientation="vertical">
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -40,12 +40,61 @@
                 </ListView>
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/tab2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
                 android:paddingTop="60dp" >
+
+                <view
+                    android:id="@+id/view1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    class="LinearLayout">
+
+                <SeekBar
+                    android:id="@+id/seekBarQuantityValue"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:max="1000"
+                    android:minWidth="250dp" />
+
+                <EditText
+                    android:id="@+id/textViewQuantityValue"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal" />
+                    
+                <Spinner
+                    android:id="@+id/spinnerQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+				</view>
+
+                <AutoCompleteTextView
+                    android:id="@+id/autoCompleteTextViewEntryDescription"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description" >
+
+                    <requestFocus />
+                </AutoCompleteTextView>
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save" />
+
+                <Button
+                    android:id="@+id/buttonReset"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/reset" />
 
                 <EditText
                     android:id="@+id/textViewUuid"
@@ -54,65 +103,7 @@
                     android:inputType="text"
                     android:visibility="invisible" />
 
-                <SeekBar
-                    android:id="@+id/seekBarQuantityValue"
-                    android:layout_width="280dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/textViewUuid"
-                    android:layout_toRightOf="@+id/textViewUuid"
-                    android:max="1000"
-                    android:minHeight="20dip" />
-
-                <EditText
-                    android:id="@+id/textViewQuantityValue"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/seekBarQuantityValue"
-                    android:layout_marginRight="28dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
-
-                <Button
-                    android:id="@+id/buttonSave"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="29dp"
-                    android:layout_toRightOf="@+id/textViewUuid"
-                    android:text="@string/save" />
-
-                <Button
-                    android:id="@+id/buttonReset"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/buttonSave"
-                    android:layout_alignBottom="@+id/buttonSave"
-                    android:layout_marginLeft="25dp"
-                    android:layout_toRightOf="@+id/buttonSave"
-                    android:text="@string/reset" />
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextViewEntryDescription"
-                    android:layout_width="280dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/seekBarQuantityValue"
-                    android:layout_centerVertical="true"
-                    android:ems="10" >
-
-                    <requestFocus />
-                </AutoCompleteTextView>
-
-                <Spinner
-                    android:id="@+id/spinnerQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/autoCompleteTextViewEntryDescription"
-                    android:layout_alignLeft="@+id/textViewQuantityValue"
-                    android:layout_marginLeft="21dp" />
-            </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/tab3"

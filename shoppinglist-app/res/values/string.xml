@@ -14,6 +14,7 @@
     <string name="clearList">Liste leeren</string>
     <string name="clearEntries">Erledigte Einträge entfernen</string>
     <string name="syncList">Liste synchronisieren</string>
+    <string name="description">Beschreibung</string>
     
     <string-array name="quantity">
         <item></item>
