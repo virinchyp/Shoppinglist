@@ -11,4 +11,15 @@
 	<session-config>
 		<session-timeout>10</session-timeout>
 	</session-config>
+
+  <servlet>
+    <servlet-name>Shoppinglist REST Service</servlet-name>
+    <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Shoppinglist REST Service</servlet-name>
+    <url-pattern>/shoppinglist/*</url-pattern>
+  </servlet-mapping>
+
 </web-app>
