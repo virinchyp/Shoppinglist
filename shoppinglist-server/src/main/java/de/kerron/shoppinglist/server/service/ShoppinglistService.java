@@ -72,7 +72,6 @@ public class ShoppinglistService {
         return response;
     }
 
-    @WebMethod
     @Produces(MediaType.TEXT_PLAIN)
     @GET
     @Path("/test")
