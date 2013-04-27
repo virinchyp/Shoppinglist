@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jws.WebMethod;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -70,5 +71,13 @@ public class ShoppinglistService {
             LOG.info(String.format("Entry with id %s updated successfully", id));
         }
         return response;
+    }
+
+    @WebMethod
+    @Produces(MediaType.TEXT_PLAIN)
+    @GET
+    @Path("/test")
+    public Response test() {
+        return Response.ok("test methode in rest service").build();
     }
 }
