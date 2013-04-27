@@ -75,8 +75,8 @@ public class ShoppinglistService {
 
     @Produces(MediaType.TEXT_PLAIN)
     @GET
-    @Path("/test")
-    public String test() {
-        return "blubbi blub blubb";
+    @Path("/version")
+    public String getVersion() {
+        return "1.0";
     }
 }
