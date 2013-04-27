@@ -57,22 +57,25 @@
 
                 <view
                     android:id="@+id/view1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    class="LinearLayout">
-
-                <EditText
-                    android:id="@+id/textViewQuantityValue"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
-                    
-                <Spinner
-                    android:id="@+id/spinnerQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    class="LinearLayout" >
 
-				</view>
+                    <EditText
+                        android:id="@+id/textViewQuantityValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:minWidth="100dp" >
+
+                        <requestFocus />
+                    </EditText>
+
+                    <Spinner
+                        android:id="@+id/spinnerQuantity"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                </view>
 
                 <AutoCompleteTextView
                     android:id="@+id/autoCompleteTextViewEntryDescription"

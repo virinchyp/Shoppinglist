@@ -405,7 +405,6 @@ public class MainActivity extends Activity {
                 seekBar.setProgress(Integer.parseInt(arg0.toString()));
             } catch (NumberFormatException e) {
                 seekBar.setProgress(1);
-                textQuantityValue.setText("1");
             }
         }
 
