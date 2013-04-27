@@ -7,4 +7,12 @@
   </parent>
   <artifactId>shoppinglist-server</artifactId>
   <name>SHOPPINGLIST SERVER</name>
+  <packaging>war</packaging>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.sun.jersey</groupId>
+  		<artifactId>jersey-server</artifactId>
+  		<version>1.17</version>
+  	</dependency>
+  </dependencies>
 </project>
