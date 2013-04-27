@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response.Status;
 /**
  * Impl Klasse des Rest-Service
  */
-@Path("/shoppinglist")
 public class ShoppinglistService {
 
     final static Logger LOG = Logger.getLogger(ShoppinglistService.class.getName());
@@ -78,6 +77,6 @@ public class ShoppinglistService {
     @GET
     @Path("/test")
     public Response test() {
-        return Response.ok("test methode in rest service").build();
+        return Response.status(Status.OK).entity("test methode in rest service").build();
     }
 }
