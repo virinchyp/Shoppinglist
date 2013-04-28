@@ -42,44 +42,23 @@ import de.ronnyfriedland.shoppinglist.helper.UIHelper;
 @SuppressWarnings("unchecked")
 public class MainActivity extends Activity {
 
+    // constants
+    private static final String CURRENT_TAB = "currenttab";
+
     // common (tab)
-    TabHost tabHost;
+    private transient TabHost tabHost;
     // tab1
-    ListView listView;
+    private transient ListView listView;
     // tab2
-    SeekBar seekBar;
-    EditText textQuantityValue;
-    EditText textUuid;
-    Spinner spinnerQuantity;
-    AutoCompleteTextView textDescription;
-    Button saveButton;
-    Button resetButton;
+    private transient SeekBar seekBar;
+    private transient EditText textQuantityValue;
+    private transient EditText textUuid;
+    private transient Spinner spinnerQuantity;
+    private transient AutoCompleteTextView textDescription;
+    private transient Button saveButton;
+    private transient Button resetButton;
 
     // tab3
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_layout);
-
-        saveButton = (Button) findViewById(R.id.buttonSave);
-        textQuantityValue = (EditText) findViewById(R.id.textViewQuantityValue);
-        spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
-        textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
-        listView = (ListView) findViewById(R.id.listViewList);
-        tabHost = (TabHost) findViewById(R.id.tabHost);
-        resetButton = (Button) findViewById(R.id.buttonReset);
-        seekBar = (SeekBar) findViewById(R.id.seekBarQuantityValue);
-        textUuid = (EditText) findViewById(R.id.textViewUuid);
-
-        configureTabs();
-        configureListView();
-        configureNewEntryView();
-        configureNewRegistrationView();
-
-        initListTabData();
-        initCreateTabData("", 1, 0, "");
-    }
 
     private void initListTabData() {
         Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
@@ -204,6 +183,30 @@ public class MainActivity extends Activity {
         // tabHost.addTab(spec3);
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_layout);
+
+        saveButton = (Button) findViewById(R.id.buttonSave);
+        textQuantityValue = (EditText) findViewById(R.id.textViewQuantityValue);
+        spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
+        textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
+        listView = (ListView) findViewById(R.id.listViewList);
+        tabHost = (TabHost) findViewById(R.id.tabHost);
+        resetButton = (Button) findViewById(R.id.buttonReset);
+        seekBar = (SeekBar) findViewById(R.id.seekBarQuantityValue);
+        textUuid = (EditText) findViewById(R.id.textViewUuid);
+
+        configureTabs();
+        configureListView();
+        configureNewEntryView();
+        configureNewRegistrationView();
+
+        initListTabData();
+        initCreateTabData("", 1, 0, "");
+    }
+
     /**
      * {@inheritDoc}
      * 
@@ -323,6 +326,28 @@ public class MainActivity extends Activity {
             return false;
         }
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
+     */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(CURRENT_TAB, tabHost.getCurrentTab());
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        tabHost.setCurrentTab(savedInstanceState.getInt(CURRENT_TAB));
     }
 
     /**
