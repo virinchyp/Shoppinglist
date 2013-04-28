@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -257,11 +259,23 @@ public class MainActivity extends Activity {
             ret = true;
             break;
         case R.id.clearlistItems: {
-            Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
-            ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
-            ShoppingListDataSource.getInstance(getBaseContext()).deleteList(list);
-            ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
-            ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog dialog = builder.setMessage(R.string.confirmDelete)
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.i(getClass().getCanonicalName(), "Clear list");
+                            Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
+                            ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
+                            ShoppingListDataSource.getInstance(getBaseContext()).deleteList(list);
+                            ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
+                            ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+                        }
+                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.i(getClass().getCanonicalName(), "Clear list canceled");
+                        }
+                    }).create();
+            dialog.show();
             ret = true;
         }
             break;
