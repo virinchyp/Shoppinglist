@@ -27,31 +27,11 @@
             android:layout_marginTop="10dp" >
 
             <LinearLayout
-                android:id="@+id/tab1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:paddingTop="60dp" >
-
-                <ListView
-                    android:id="@+id/listViewList"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" >
-                </ListView>
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/tab2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
                 android:paddingTop="60dp" >
-
-                <view
-                    android:id="@+id/view1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    class="LinearLayout">
 
                 <SeekBar
                     android:id="@+id/seekBarQuantityValue"
@@ -60,27 +40,33 @@
                     android:max="1000"
                     android:minWidth="250dp" />
 
-                <EditText
-                    android:id="@+id/textViewQuantityValue"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
-                    
-                <Spinner
-                    android:id="@+id/spinnerQuantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-				</view>
-
-                <AutoCompleteTextView
-                    android:id="@+id/autoCompleteTextViewEntryDescription"
+                <view
+                    android:id="@+id/view1"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/description" >
+                    class="LinearLayout" >
 
-                    <requestFocus />
-                </AutoCompleteTextView>
+                    <EditText
+                        android:id="@+id/textViewQuantityValue"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinnerQuantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/autoCompleteTextViewEntryDescription"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/description" >
+
+                        <requestFocus />
+                    </AutoCompleteTextView>
+
+                </view>
 
                 <Button
                     android:id="@+id/buttonSave"
@@ -102,7 +88,20 @@
                     android:layout_height="wrap_content"
                     android:inputType="text"
                     android:visibility="invisible" />
+            </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/tab1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
+
+                <ListView
+                    android:id="@+id/listViewList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" >
+                </ListView>
             </LinearLayout>
 
             <LinearLayout
