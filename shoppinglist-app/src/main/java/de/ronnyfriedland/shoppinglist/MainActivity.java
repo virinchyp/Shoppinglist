@@ -241,7 +241,10 @@ public class MainActivity extends Activity {
      */
     @Override
     public boolean onTouchEvent(MotionEvent me) {
-        return gestureScanner.onTouchEvent(me);
+        if (gestureScanner.onTouchEvent(me)) {
+            return true;
+        }
+        return false;
     }
 
     /**
