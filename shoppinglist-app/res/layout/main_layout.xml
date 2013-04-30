@@ -1,94 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/tabHost" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@color/background"
-	android:orientation="vertical">
+    android:id="@+id/tabHost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:orientation="vertical" >
 
-	<RelativeLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
 
-		<TabWidget android:id="@android:id/tabs"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:orientation="horizontal">
-		</TabWidget>
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+        </TabWidget>
 
-		<FrameLayout android:id="@android:id/tabcontent"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_marginBottom="10dp" android:layout_marginLeft="10dp"
-			android:layout_marginRight="10dp" android:layout_marginTop="10dp">
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp" >
 
-			<LinearLayout android:id="@+id/tab1"
-				android:layout_width="match_parent" android:layout_height="match_parent"
-				android:orientation="vertical" android:paddingTop="60dp">
+            <LinearLayout
+                android:id="@+id/tab1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
 
-				<android.gesture.GestureOverlayView
-					android:id="@+id/gestureOverlayTab1" android:layout_width="fill_parent"
-					android:layout_height="fill_parent" android:duplicateParentState="false">
+                <android.gesture.GestureOverlayView
+                    android:id="@+id/gestureOverlayTab1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:duplicateParentState="false"
+                    android:gestureColor="#00000000"
+                    android:uncertainGestureColor="#00000000" >
 
-					<ListView android:id="@+id/listViewList"
-						android:layout_width="match_parent" android:layout_height="match_parent"
-						android:layout_gravity="top">
-					</ListView>
-				</android.gesture.GestureOverlayView>
-			</LinearLayout>
+                    <ListView
+                        android:id="@+id/listViewList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="top" >
+                    </ListView>
+                </android.gesture.GestureOverlayView>
+            </LinearLayout>
 
-			<LinearLayout android:id="@+id/tab2"
-				android:layout_width="match_parent" android:layout_height="match_parent"
-				android:orientation="vertical" android:paddingTop="60dp">
+            <LinearLayout
+                android:id="@+id/tab2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
 
-				<SeekBar android:id="@+id/seekBarQuantityValue"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:max="1000" android:minHeight="20dip" />
+                <SeekBar
+                    android:id="@+id/seekBarQuantityValue"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:max="1000"
+                    android:minHeight="20dip" />
 
-				<android.gesture.GestureOverlayView
-					android:id="@+id/gestureOverlayTab2" android:layout_width="fill_parent"
-					android:layout_height="fill_parent">
+                <android.gesture.GestureOverlayView
+                    android:id="@+id/gestureOverlayTab2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gestureColor="#00000000"
+                    android:uncertainGestureColor="#00000000" >
 
-					<LinearLayout android:layout_width="fill_parent"
-						android:layout_height="fill_parent" android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical" >
 
-						<view android:id="@+id/view1" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" class="LinearLayout">
+                        <view
+                            android:id="@+id/view1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            class="LinearLayout" >
 
-							<EditText android:id="@+id/textViewQuantityValue"
-								android:layout_width="wrap_content" android:layout_height="wrap_content"
-								android:inputType="numberDecimal" android:minWidth="100dp">
+                            <EditText
+                                android:id="@+id/textViewQuantityValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal"
+                                android:minWidth="100dp" >
 
-								<requestFocus />
-							</EditText>
+                                <requestFocus />
+                            </EditText>
 
-							<Spinner android:id="@+id/spinnerQuantity"
-								android:layout_width="fill_parent" android:layout_height="wrap_content" />
+                            <Spinner
+                                android:id="@+id/spinnerQuantity"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content" />
+                        </view>
 
-						</view>
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteTextViewEntryDescription"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/description" />
 
-						<AutoCompleteTextView android:id="@+id/autoCompleteTextViewEntryDescription"
-							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:hint="@string/description" />
+                        <Button
+                            android:id="@+id/buttonSave"
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/save" />
 
+                        <Button
+                            android:id="@+id/buttonReset"
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reset" />
 
-						<Button android:id="@+id/buttonSave" style="?android:attr/buttonStyleSmall"
-							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:text="@string/save" />
+                        <EditText
+                            android:id="@+id/textViewUuid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+                </android.gesture.GestureOverlayView>
+            </LinearLayout>
 
-						<Button android:id="@+id/buttonReset" style="?android:attr/buttonStyleSmall"
-							android:layout_width="fill_parent" android:layout_height="wrap_content"
-							android:text="@string/reset" />
-
-						<EditText android:id="@+id/textViewUuid"
-							android:layout_width="wrap_content" android:layout_height="wrap_content"
-							android:inputType="text" android:visibility="invisible" />
-					</LinearLayout>
-				</android.gesture.GestureOverlayView>
-			</LinearLayout>
-
-			<LinearLayout android:id="@+id/tab3"
-				android:layout_width="fill_parent" android:layout_height="364dp"
-				android:orientation="vertical" android:paddingTop="60dp"
-				android:visibility="invisible">
-			</LinearLayout>
-		</FrameLayout>
-
-	</RelativeLayout>
+            <LinearLayout
+                android:id="@+id/tab3"
+                android:layout_width="fill_parent"
+                android:layout_height="364dp"
+                android:orientation="vertical"
+                android:paddingTop="60dp"
+                android:visibility="invisible" >
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
 
 </TabHost>
