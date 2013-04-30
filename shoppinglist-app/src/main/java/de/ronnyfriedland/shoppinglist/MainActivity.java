@@ -241,10 +241,13 @@ public class MainActivity extends Activity {
      */
     @Override
     public boolean onTouchEvent(MotionEvent me) {
-        if (gestureScanner.onTouchEvent(me)) {
-            return true;
+        boolean ret = false;
+        try {
+            ret = gestureScanner.onTouchEvent(me);
+        } catch (Exception e) {
+            Log.e(getClass().getCanonicalName(), "Got exception on touch event.", e);
         }
-        return false;
+        return ret;
     }
 
     /**
@@ -293,7 +296,7 @@ public class MainActivity extends Activity {
         boolean ret;
         switch (item.getItemId()) {
         case R.id.exit:
-            System.exit(0);
+            finish();
             ret = true;
             break;
         case R.id.clearlistItems: {
@@ -354,6 +357,7 @@ public class MainActivity extends Activity {
      */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        boolean result = false;
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Entry entry = (Entry) listView.getAdapter().getItem(info.position);
         if (item.getTitle() == getResources().getString(R.string.delete)) {
@@ -362,6 +366,8 @@ public class MainActivity extends Activity {
             ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(entry);
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).remove(entry);
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+
+            result = true;
         } else if (item.getTitle() == getResources().getString(R.string.edit)) {
             Log.d(getClass().getCanonicalName(), String.format("Edit entry with id %s.", entry.getUuid()));
 
@@ -374,12 +380,11 @@ public class MainActivity extends Activity {
             }
 
             initCreateTabData(entry.getUuid(), entry.getQuantity().getValue(), quantityUnitRes, entry.getDescription());
-
             tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
-        } else {
-            return false;
+
+            result = true;
         }
-        return true;
+        return result;
     }
 
     /**
