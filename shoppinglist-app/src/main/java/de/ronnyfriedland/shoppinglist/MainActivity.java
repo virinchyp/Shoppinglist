@@ -6,6 +6,12 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.GestureOverlayView.OnGesturePerformedListener;
+import android.gesture.Prediction;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Selection;
@@ -13,8 +19,10 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -47,10 +55,15 @@ public class MainActivity extends Activity {
     // constants
     private static final String CURRENT_TAB = "currenttab";
 
+    // gestures
+    private GestureDetector gestureScanner;
+    private GestureLibrary gestureLib;
+
     // common (tab)
     private transient TabHost tabHost;
     // tab1
     private transient ListView listView;
+    private transient GestureOverlayView gestureOverlayTab1;
     // tab2
     private transient SeekBar seekBar;
     private transient EditText textQuantityValue;
@@ -59,6 +72,7 @@ public class MainActivity extends Activity {
     private transient AutoCompleteTextView textDescription;
     private transient Button saveButton;
     private transient Button resetButton;
+    private transient GestureOverlayView gestureOverlayTab2;
 
     // tab3
 
@@ -101,6 +115,7 @@ public class MainActivity extends Activity {
         textQuantityValue.addTextChangedListener(new ShoppingListTextWatcher());
 
         saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 String uuid = textUuid.getText().toString();
                 Integer quantityValue = Integer.valueOf(textQuantityValue.getText().toString());
@@ -134,11 +149,13 @@ public class MainActivity extends Activity {
         });
 
         resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 initCreateTabData("", 1, 0, "");
             }
         });
 
+        gestureOverlayTab2.addOnGesturePerformedListener(new MyOnGestureListener());
     }
 
     private void configureListView() {
@@ -148,6 +165,8 @@ public class MainActivity extends Activity {
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         listView.setOnItemClickListener(new ShoppingListClickListener());
         registerForContextMenu(listView);
+
+        gestureOverlayTab1.addOnGesturePerformedListener(new MyOnGestureListener());
     }
 
     private void configureTabs() {
@@ -199,7 +218,13 @@ public class MainActivity extends Activity {
         resetButton = (Button) findViewById(R.id.buttonReset);
         seekBar = (SeekBar) findViewById(R.id.seekBarQuantityValue);
         textUuid = (EditText) findViewById(R.id.textViewUuid);
+        gestureOverlayTab1 = (GestureOverlayView) findViewById(R.id.gestureOverlayTab1);
+        gestureOverlayTab2 = (GestureOverlayView) findViewById(R.id.gestureOverlayTab2);
 
+        gestureLib = GestureLibraries.fromRawResource(getBaseContext(), R.raw.gestures);
+        if (!gestureLib.load()) {
+            finish();
+        }
         configureTabs();
         configureListView();
         configureNewEntryView();
@@ -207,6 +232,16 @@ public class MainActivity extends Activity {
 
         initListTabData();
         initCreateTabData("", 1, 0, "");
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent me) {
+        return gestureScanner.onTouchEvent(me);
     }
 
     /**
@@ -262,6 +297,7 @@ public class MainActivity extends Activity {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             AlertDialog dialog = builder.setMessage(R.string.confirmDelete)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
                         public void onClick(DialogInterface dialog, int id) {
                             Log.i(getClass().getCanonicalName(), "Clear list");
                             Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
@@ -271,6 +307,7 @@ public class MainActivity extends Activity {
                             ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
                         }
                     }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
                         public void onClick(DialogInterface dialog, int id) {
                             Log.i(getClass().getCanonicalName(), "Clear list canceled");
                         }
@@ -475,6 +512,38 @@ public class MainActivity extends Activity {
                 entry.setStatus(Status.OPEN);
             }
             ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);
+        }
+    }
+
+    /**
+     * @author Ronny Friedland
+     */
+    class MyOnGestureListener implements OnGesturePerformedListener {
+        @Override
+        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+            ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
+            if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
+                String result = predictions.get(0).name;
+                if ("moveleft".equalsIgnoreCase(result)) {
+                    int currentTab = tabHost.getCurrentTab();
+                    int childCount = tabHost.getChildCount();
+                    if (currentTab > 0) {
+                        tabHost.setCurrentTab(currentTab - 1);
+                    } else {
+                        tabHost.setCurrentTab(childCount);
+                    }
+                    Log.d("Main", "" + gesture);
+                } else if ("moveright".equalsIgnoreCase(result)) {
+                    int currentTab = tabHost.getCurrentTab();
+                    int childCount = tabHost.getChildCount();
+                    if (childCount > currentTab) {
+                        tabHost.setCurrentTab(currentTab + 1);
+                    } else {
+                        tabHost.setCurrentTab(0);
+                    }
+                    Log.d("Main", "" + gesture);
+                }
+            }
         }
     }
 }

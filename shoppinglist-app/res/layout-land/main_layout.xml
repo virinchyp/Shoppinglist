@@ -33,11 +33,18 @@
                 android:orientation="vertical"
                 android:paddingTop="60dp" >
 
-                <ListView
-                    android:id="@+id/listViewList"
+                <android.gesture.GestureOverlayView
+                    android:id="@+id/gestureOverlayTab1"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent" >
-                </ListView>
+                    android:layout_height="fill_parent"
+                    android:duplicateParentState="false" >
+
+                    <ListView
+                        android:id="@+id/listViewList"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" >
+                    </ListView>
+                </android.gesture.GestureOverlayView>
             </LinearLayout>
 
             <LinearLayout
@@ -54,54 +61,65 @@
                     android:max="1000"
                     android:minWidth="250dp" />
 
-                <view
-                    android:id="@+id/view1"
+                <android.gesture.GestureOverlayView
+                    android:id="@+id/gestureOverlayTab2"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    class="LinearLayout" >
+                    android:layout_height="fill_parent" >
 
-                    <EditText
-                        android:id="@+id/textViewQuantityValue"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal" />
-
-                    <Spinner
-                        android:id="@+id/spinnerQuantity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-
-                    <AutoCompleteTextView
-                        android:id="@+id/autoCompleteTextViewEntryDescription"
+                    <LinearLayout
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/description" >
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical" >
 
-                        <requestFocus />
-                    </AutoCompleteTextView>
+                        <view
+                            android:id="@+id/view1"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            class="LinearLayout" >
 
-                </view>
+                            <EditText
+                                android:id="@+id/textViewQuantityValue"
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:inputType="numberDecimal" />
 
-                <Button
-                    android:id="@+id/buttonSave"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/save" />
+                            <Spinner
+                                android:id="@+id/spinnerQuantity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
 
-                <Button
-                    android:id="@+id/buttonReset"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/reset" />
+                            <AutoCompleteTextView
+                                android:id="@+id/autoCompleteTextViewEntryDescription"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/description" >
 
-                <EditText
-                    android:id="@+id/textViewUuid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:visibility="invisible" />
+                                <requestFocus />
+                            </AutoCompleteTextView>
+                        </view>
+
+                        <Button
+                            android:id="@+id/buttonSave"
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/save" />
+
+                        <Button
+                            android:id="@+id/buttonReset"
+                            style="?android:attr/buttonStyleSmall"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reset" />
+
+                        <EditText
+                            android:id="@+id/textViewUuid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+                </android.gesture.GestureOverlayView>
             </LinearLayout>
 
             <LinearLayout
