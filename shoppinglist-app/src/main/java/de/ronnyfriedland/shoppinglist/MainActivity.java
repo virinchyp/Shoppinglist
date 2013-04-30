@@ -155,7 +155,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        gestureOverlayTab2.addOnGesturePerformedListener(new MyOnGestureListener());
+        gestureOverlayTab2.addOnGesturePerformedListener(new ShoppingListGestureListener());
     }
 
     private void configureListView() {
@@ -166,7 +166,7 @@ public class MainActivity extends Activity {
         listView.setOnItemClickListener(new ShoppingListClickListener());
         registerForContextMenu(listView);
 
-        gestureOverlayTab1.addOnGesturePerformedListener(new MyOnGestureListener());
+        gestureOverlayTab1.addOnGesturePerformedListener(new ShoppingListGestureListener());
     }
 
     private void configureTabs() {
@@ -521,7 +521,7 @@ public class MainActivity extends Activity {
     /**
      * @author Ronny Friedland
      */
-    class MyOnGestureListener implements OnGesturePerformedListener {
+    class ShoppingListGestureListener implements OnGesturePerformedListener {
         @Override
         public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
             ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
@@ -535,7 +535,6 @@ public class MainActivity extends Activity {
                     } else {
                         tabHost.setCurrentTab(childCount);
                     }
-                    Log.d("Main", "" + gesture);
                 } else if ("moveright".equalsIgnoreCase(result)) {
                     int currentTab = tabHost.getCurrentTab();
                     int childCount = tabHost.getChildCount();
@@ -544,7 +543,6 @@ public class MainActivity extends Activity {
                     } else {
                         tabHost.setCurrentTab(0);
                     }
-                    Log.d("Main", "" + gesture);
                 }
             }
         }
