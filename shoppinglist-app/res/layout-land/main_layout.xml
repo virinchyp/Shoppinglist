@@ -126,14 +126,6 @@
                 </android.gesture.GestureOverlayView>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/tab3"
-                android:layout_width="fill_parent"
-                android:layout_height="364dp"
-                android:orientation="vertical"
-                android:paddingTop="60dp"
-                android:visibility="invisible" >
-            </LinearLayout>
         </FrameLayout>
     </RelativeLayout>
 

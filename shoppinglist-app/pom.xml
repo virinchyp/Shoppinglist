@@ -8,6 +8,7 @@
 	</parent>
 	<artifactId>shoppinglist-app</artifactId>
 	<name>SHOPPINGLIST APP</name>
+        <version>1.0-SNAPSHOT</version>
 	<packaging>apk</packaging>
 	<dependencies>
 		<dependency>
@@ -16,17 +17,6 @@
 			<version>4.1.1.4</version>
 			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>de.kerron</groupId>
-            <artifactId>shoppinglist-client</artifactId>
-            <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-configuration</artifactId>
-                    <groupId>commons-configuration</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>

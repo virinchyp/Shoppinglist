@@ -49,7 +49,8 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
                 + Entry.COL_QUANTITYVALUE + " integer not null, " + Entry.COL_QUANTITY + " text not null,"
                 + Entry.COL_LIST + " list not null)");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "(" + Shoppinglist.COL_ID + " text not null)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "(" + Shoppinglist.COL_ID
+                + " text primary key)");
     }
 
     /**
@@ -65,14 +66,6 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
 
     private ShoppingListDataSource(final Context context) {
         super(context, SHOPPINGLIST_DB_NAME, null, SHOPPINGLIST_DB_VERSION);
-        // SQLiteDatabase db =
-        // SQLiteDatabase.openDatabase(context.getFilesDir().getPath() + "/" +
-        // SHOPPINGLIST_DB_NAME,
-        // null, SQLiteDatabase.CREATE_IF_NECESSARY);
-        //
-        // database = new ShoppingListSqliteHelper(context,
-        // SHOPPINGLIST_DB_NAME, SHOPPINGLIST_DB_VERSION)
-        // .getReadableDatabase();
     }
 
     /**
@@ -203,21 +196,16 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
 
     /**
      * Deletes the {@link Shoppinglist} given as parameter.
-     * 
-     * @param list
-     *            the {@link Shoppinglist} to delete
      */
-    public void deleteList(final Shoppinglist list) {
-        if (null != list) {
-            SQLiteDatabase database = getWritableDatabase();
-            database.beginTransaction();
-            try {
-                database.delete(Shoppinglist.TABLE, null, null);
-                database.setTransactionSuccessful();
-            } finally {
-                database.endTransaction();
-                database.close();
-            }
+    public void deleteList() {
+        SQLiteDatabase database = getWritableDatabase();
+        database.beginTransaction();
+        try {
+            database.delete(Shoppinglist.TABLE, null, null);
+            database.setTransactionSuccessful();
+        } finally {
+            database.endTransaction();
+            database.close();
         }
     }
 

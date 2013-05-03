@@ -1,6 +1,7 @@
 package de.ronnyfriedland.shoppinglist;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import android.app.Activity;
@@ -45,6 +46,7 @@ import de.ronnyfriedland.shoppinglist.entity.Shoppinglist;
 import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
 import de.ronnyfriedland.shoppinglist.entity.enums.Status;
 import de.ronnyfriedland.shoppinglist.helper.UIHelper;
+import de.ronnyfriedland.shoppinglist.xml.ReadXMLFile;
 
 /**
  * @author Ronny Friedland
@@ -74,8 +76,6 @@ public class MainActivity extends Activity {
     private transient Button resetButton;
     private transient GestureOverlayView gestureOverlayTab2;
 
-    // tab3
-
     private void initListTabData() {
         Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
         if (null == list) {
@@ -96,23 +96,17 @@ public class MainActivity extends Activity {
         textQuantityValue.setText(String.valueOf(quantity));
     }
 
-    private void configureNewRegistrationView() {
-
-    }
-
     private void configureNewEntryView() {
         seekBar.setOnSeekBarChangeListener(new ShoppingListSeekBarListener());
 
-        // Create an ArrayAdapter using the string array and a default spinner
-        // layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getBaseContext(), R.array.quantity,
-                android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spinnerQuantity.setAdapter(adapter);
-
         textQuantityValue.addTextChangedListener(new ShoppingListTextWatcher());
+
+        spinnerQuantity.setAdapter(ArrayAdapter.createFromResource(getBaseContext(), R.array.quantity,
+                android.R.layout.simple_spinner_dropdown_item));
+
+        Collection<String> list = ReadXMLFile.parseFile(getResources().getString(R.xml.description));
+        textDescription.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list
+                .toArray(new String[list.size()])));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,13 +189,8 @@ public class MainActivity extends Activity {
         spec2.setIndicator(getResources().getString(R.string.create));
         spec2.setContent(R.id.tab2);
 
-        TabSpec spec3 = tabHost.newTabSpec(getResources().getString(R.string.register));
-        spec3.setIndicator(getResources().getString(R.string.register));
-        spec3.setContent(R.id.tab3);
-
         tabHost.addTab(spec1);
         tabHost.addTab(spec2);
-        // tabHost.addTab(spec3);
     }
 
     @Override
@@ -228,7 +217,6 @@ public class MainActivity extends Activity {
         configureTabs();
         configureListView();
         configureNewEntryView();
-        configureNewRegistrationView();
 
         initListTabData();
         initCreateTabData("", 1, 0, "");
@@ -308,7 +296,7 @@ public class MainActivity extends Activity {
                             Log.i(getClass().getCanonicalName(), "Clear list");
                             Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
                             ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
-                            ShoppingListDataSource.getInstance(getBaseContext()).deleteList(list);
+                            ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
                             ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
                             ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
                         }
@@ -334,8 +322,7 @@ public class MainActivity extends Activity {
                 }
             }
             if (0 == entries.size()) {
-                Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
-                ShoppingListDataSource.getInstance(getBaseContext()).deleteList(list);
+                ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
             }
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
@@ -534,16 +521,16 @@ public class MainActivity extends Activity {
                 String result = predictions.get(0).name;
                 if ("moveleft".equalsIgnoreCase(result)) {
                     int currentTab = tabHost.getCurrentTab();
-                    int childCount = tabHost.getChildCount();
+                    int childCount = tabHost.getTabWidget().getChildCount();
                     if (currentTab > 0) {
                         tabHost.setCurrentTab(currentTab - 1);
                     } else {
-                        tabHost.setCurrentTab(childCount);
+                        tabHost.setCurrentTab(childCount - 1);
                     }
                 } else if ("moveright".equalsIgnoreCase(result)) {
                     int currentTab = tabHost.getCurrentTab();
-                    int childCount = tabHost.getChildCount();
-                    if (childCount > currentTab) {
+                    int childCount = tabHost.getTabWidget().getChildCount();
+                    if (childCount - 1 > currentTab) {
                         tabHost.setCurrentTab(currentTab + 1);
                     } else {
                         tabHost.setCurrentTab(0);
