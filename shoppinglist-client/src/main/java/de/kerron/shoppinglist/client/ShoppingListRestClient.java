@@ -94,6 +94,19 @@ public final class ShoppingListRestClient {
         return 200 == response.getStatus();
     }
 
+    public String register(final String username, final String password) {
+        if (null == username) {
+            throw new IllegalArgumentException("username must not be null");
+        }
+        if (null == password) {
+            throw new IllegalArgumentException("password must not be null");
+        }
+        WebResource service = client.resource(getBaseURI());
+        ClientResponse response = service.path("register").queryParam("username", username)
+                .queryParam("password", password).accept(MediaType.TEXT_PLAIN).post(ClientResponse.class);
+        return response.getEntity(String.class);
+    }
+
     private static URI getBaseURI() {
         Boolean isSecure = Configurator.CONFIG.getBoolean(Configurator.ConfiguratorKeys.SECURE.getKey(), Boolean.FALSE);
         String host = Configurator.CONFIG.getString(Configurator.ConfiguratorKeys.HOST.getKey(), "localhost");
