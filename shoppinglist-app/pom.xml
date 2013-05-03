@@ -17,11 +17,6 @@
 			<version>4.1.1.4</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>de.kerron</groupId>
-			<artifactId>shoppinglist-common</artifactId>
-			<version>${parent.version}</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -39,7 +34,7 @@
 					</sdk>
 					<emulator>
 						<avd>16</avd>
-						<wait>10000</wait>
+						<wait>5000</wait>
 						<options>-no-skin</options>
 					</emulator>
 				</configuration>

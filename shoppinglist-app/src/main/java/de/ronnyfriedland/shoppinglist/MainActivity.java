@@ -101,10 +101,12 @@ public class MainActivity extends Activity {
 
         textQuantityValue.addTextChangedListener(new ShoppingListTextWatcher());
 
-        spinnerQuantity.setAdapter(ArrayAdapter.createFromResource(getBaseContext(), R.array.quantity,
-                android.R.layout.simple_spinner_dropdown_item));
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getBaseContext(), R.array.quantity,
+                android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerQuantity.setAdapter(adapter);
 
-        Collection<String> list = ReadXMLFile.parseFile(getResources().getString(R.xml.description));
+        Collection<String> list = ReadXMLFile.parseFile(getResources().getString(R.raw.description));
         textDescription.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list
                 .toArray(new String[list.size()])));
 
