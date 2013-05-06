@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?> 
+<?xml version="1.0" encoding="utf-8"?>
 <descriptions>
     <description>Wasser</description>
     <description>Bier</description>
@@ -10,5 +10,47 @@
     <description>Brötchen</description>
     <description>Butter</description>
     <description>Marmelade</description>
+    <description>Honig</description>
     <description>Schokoladenaufstrich</description>
+    <description>Mehl</description>
+    <description>Zucker</description>
+    <description>Salz</description>
+    <description>Reis</description>
+    <description>Nudeln</description>
+    <description>Kartoffeln</description>
+    <description>Zwiebeln</description>
+    <description>Knoblauch</description>
+    <description>Gemüse</description>
+    <description>Paprika</description>
+    <description>Tomate</description>
+    <description>Gurke</description>
+    <description>Sellerie</description>
+    <description>Zuccini</description>
+    <description>Salat</description>
+    <description>Obst</description>
+    <description>Apfel</description>
+    <description>Birne</description>
+    <description>Banane</description>
+    <description>Ananas</description>
+    <description>Orange</description>
+    <description>Mandarine</description>
+    <description>Kiwi</description>
+    <description>Papaya</description>
+    <description>Kokosmilch</description>
+    <description>Wurst</description>
+    <description>Käse</description>
+    <description>Joghurt</description>
+    <description>Quark</description>
+    <description>Schokolade</description>
+    <description>Kekse</description>
+    <description>Waffeln</description>
+    <description>Milch</description>
+    <description>Kaffee</description>
+    <description>Kakao</description>
+    <description>Rotkohl</description>
+    <description>Mischgemüse</description>
+    <description>Geflügel</description>
+    <description>Rind</description>
+    <description>Schwein</description>
+    <description>Fisch</description>
 </descriptions>
