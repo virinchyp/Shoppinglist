@@ -114,7 +114,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 String uuid = textUuid.getText().toString();
-                Integer quantityValue = Integer.valueOf(textQuantityValue.getText().toString());
+                String quantity = textQuantityValue.getText().toString();
+
+                Integer quantityValue = "".equals(quantity) ? 0 : Integer.valueOf(textQuantityValue.getText()
+                        .toString());
                 String quantityUnit = (String) spinnerQuantity.getSelectedItem();
                 String description = textDescription.getText().toString();
 
