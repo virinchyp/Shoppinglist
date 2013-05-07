@@ -25,6 +25,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -183,7 +186,6 @@ public class MainActivity extends Activity {
                     initCreateTabData("", 1, 0, "");
                 }
             }
-
         });
 
         TabSpec spec1 = tabHost.newTabSpec(getResources().getString(R.string.list));
@@ -532,6 +534,16 @@ public class MainActivity extends Activity {
                     } else {
                         tabHost.setCurrentTab(childCount - 1);
                     }
+                    View currentView = tabHost.getCurrentView();
+
+                    TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animation.setDuration(240);
+                    animation.setInterpolator(new AccelerateInterpolator());
+
+                    currentView.setAnimation(animation);
+
                 } else if ("moveright".equalsIgnoreCase(result)) {
                     int currentTab = tabHost.getCurrentTab();
                     int childCount = tabHost.getTabWidget().getChildCount();
@@ -540,6 +552,15 @@ public class MainActivity extends Activity {
                     } else {
                         tabHost.setCurrentTab(0);
                     }
+                    View currentView = tabHost.getCurrentView();
+
+                    TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animation.setDuration(240);
+                    animation.setInterpolator(new AccelerateInterpolator());
+
+                    currentView.setAnimation(animation);
                 }
             }
         }
