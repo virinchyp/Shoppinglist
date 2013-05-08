@@ -526,41 +526,55 @@ public class MainActivity extends Activity {
             ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
             if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
                 String result = predictions.get(0).name;
+                // move in left
+                TranslateAnimation animLeftIn = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
+                        Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                        Animation.RELATIVE_TO_PARENT, 0.0f);
+                animLeftIn.setDuration(180);
+                animLeftIn.setInterpolator(new AccelerateInterpolator());
+                // move out left
+                TranslateAnimation animLeftOut = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
+                        Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                        Animation.RELATIVE_TO_PARENT, 0.0f);
+                animLeftOut.setDuration(180);
+                animLeftOut.setInterpolator(new AccelerateInterpolator());
+                // move in right
+                TranslateAnimation animRightIn = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
+                        Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                        Animation.RELATIVE_TO_PARENT, 0.0f);
+                animRightIn.setDuration(180);
+                animRightIn.setInterpolator(new AccelerateInterpolator());
+                // move out right
+                TranslateAnimation animRightOut = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
+                        Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                        Animation.RELATIVE_TO_PARENT, 0.0f);
+                animRightOut.setDuration(180);
+                animRightOut.setInterpolator(new AccelerateInterpolator());
+
                 if ("moveleft".equalsIgnoreCase(result)) {
                     int currentTab = tabHost.getCurrentTab();
                     int childCount = tabHost.getTabWidget().getChildCount();
+                    View currentView = tabHost.getCurrentView();
                     if (currentTab > 0) {
                         tabHost.setCurrentTab(currentTab - 1);
                     } else {
                         tabHost.setCurrentTab(childCount - 1);
                     }
-                    View currentView = tabHost.getCurrentView();
-
-                    TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
-                            Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-                            Animation.RELATIVE_TO_PARENT, 0.0f);
-                    animation.setDuration(240);
-                    animation.setInterpolator(new AccelerateInterpolator());
-
-                    currentView.setAnimation(animation);
-
+                    View nextView = tabHost.getCurrentView();
+                    currentView.setAnimation(animLeftOut);
+                    nextView.setAnimation(animLeftIn);
                 } else if ("moveright".equalsIgnoreCase(result)) {
                     int currentTab = tabHost.getCurrentTab();
                     int childCount = tabHost.getTabWidget().getChildCount();
+                    View currentView = tabHost.getCurrentView();
                     if (childCount - 1 > currentTab) {
                         tabHost.setCurrentTab(currentTab + 1);
                     } else {
                         tabHost.setCurrentTab(0);
                     }
-                    View currentView = tabHost.getCurrentView();
-
-                    TranslateAnimation animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
-                            Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-                            Animation.RELATIVE_TO_PARENT, 0.0f);
-                    animation.setDuration(240);
-                    animation.setInterpolator(new AccelerateInterpolator());
-
-                    currentView.setAnimation(animation);
+                    View nextView = tabHost.getCurrentView();
+                    currentView.setAnimation(animRightOut);
+                    nextView.setAnimation(animRightIn);
                 }
             }
         }
