@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>shoppinglist-app</artifactId>
 	<name>SHOPPINGLIST APP</name>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
 	<packaging>apk</packaging>
 	<dependencies>
 		<dependency>
