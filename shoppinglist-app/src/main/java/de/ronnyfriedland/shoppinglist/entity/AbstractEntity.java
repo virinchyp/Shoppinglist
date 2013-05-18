@@ -7,7 +7,7 @@ package de.ronnyfriedland.shoppinglist.entity;
  */
 public abstract class AbstractEntity {
 
-    private String uuid;
+    private final String uuid;
 
     /**
      * Creates a new {@link AbstractEntity}.
@@ -46,7 +46,7 @@ public abstract class AbstractEntity {
     @Override
     public boolean equals(Object o) {
         boolean equals = false;
-        if (null != o && o instanceof Entry) {
+        if (null != o && o instanceof AbstractEntity) {
             if (((AbstractEntity) o).getUuid().equals(getUuid())) {
                 equals = true;
             }

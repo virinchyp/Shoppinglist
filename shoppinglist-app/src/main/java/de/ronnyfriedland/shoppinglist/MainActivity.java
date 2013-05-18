@@ -200,6 +200,47 @@ public class MainActivity extends Activity {
         tabHost.addTab(spec2);
     }
 
+    private void clearItems() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog dialog = builder.setMessage(R.string.confirmDelete)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i(getClass().getCanonicalName(), "Clear list");
+                        Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
+                        ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
+                        ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
+                        ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
+                        ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+                    }
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Log.i(getClass().getCanonicalName(), "Clear list canceled");
+                    }
+                }).create();
+        dialog.show();
+    }
+
+    private void clearFinishedItems() {
+        List<Entry> entries = new ArrayList<Entry>();
+        for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+            Entry entry = (Entry) listView.getAdapter().getItem(i);
+            if (Status.FINISHED.equals(entry.getStatus())) {
+                Log.d(getClass().getCanonicalName(), String.format("Delete entry with id %s.", entry.getUuid()));
+                ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(entry);
+            } else {
+                entries.add(entry);
+            }
+        }
+        if (0 == entries.size()) {
+            ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
+        }
+        ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
+        ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
+        ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -295,45 +336,12 @@ public class MainActivity extends Activity {
             ret = true;
             break;
         case R.id.clearlistItems: {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            AlertDialog dialog = builder.setMessage(R.string.confirmDelete)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Log.i(getClass().getCanonicalName(), "Clear list");
-                            Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
-                            ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
-                            ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
-                            ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
-                            ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
-                        }
-                    }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            Log.i(getClass().getCanonicalName(), "Clear list canceled");
-                        }
-                    }).create();
-            dialog.show();
+            clearItems();
             ret = true;
         }
             break;
         case R.id.clearFinishedItems: {
-            List<Entry> entries = new ArrayList<Entry>();
-            for (int i = 0; i < listView.getAdapter().getCount(); i++) {
-                Entry entry = (Entry) listView.getAdapter().getItem(i);
-                if (Status.FINISHED.equals(entry.getStatus())) {
-                    Log.d(getClass().getCanonicalName(), String.format("Delete entry with id %s.", entry.getUuid()));
-                    ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(entry);
-                } else {
-                    entries.add(entry);
-                }
-            }
-            if (0 == entries.size()) {
-                ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
-            }
-            ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
-            ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
-            ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+            clearFinishedItems();
             ret = true;
         }
             break;
@@ -526,55 +534,67 @@ public class MainActivity extends Activity {
             ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
             if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
                 String result = predictions.get(0).name;
-                // move in left
-                TranslateAnimation animLeftIn = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
-                        Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-                        Animation.RELATIVE_TO_PARENT, 0.0f);
-                animLeftIn.setDuration(180);
-                animLeftIn.setInterpolator(new AccelerateInterpolator());
-                // move out left
-                TranslateAnimation animLeftOut = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
-                        Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-                        Animation.RELATIVE_TO_PARENT, 0.0f);
-                animLeftOut.setDuration(180);
-                animLeftOut.setInterpolator(new AccelerateInterpolator());
-                // move in right
-                TranslateAnimation animRightIn = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
-                        Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-                        Animation.RELATIVE_TO_PARENT, 0.0f);
-                animRightIn.setDuration(180);
-                animRightIn.setInterpolator(new AccelerateInterpolator());
-                // move out right
-                TranslateAnimation animRightOut = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
-                        Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
-                        Animation.RELATIVE_TO_PARENT, 0.0f);
-                animRightOut.setDuration(180);
-                animRightOut.setInterpolator(new AccelerateInterpolator());
+                if ("clearall".equalsIgnoreCase(result)) {
+                    int currentTab = tabHost.getCurrentTab();
+                    if (0 == currentTab) {
+                        clearItems();
+                    }
+                } else if ("clearfinished".equalsIgnoreCase(result)) {
+                    int currentTab = tabHost.getCurrentTab();
+                    if (0 == currentTab) {
+                        clearFinishedItems();
+                    }
+                } else {
+                    // move in left
+                    TranslateAnimation animLeftIn = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animLeftIn.setDuration(180);
+                    animLeftIn.setInterpolator(new AccelerateInterpolator());
+                    // move out left
+                    TranslateAnimation animLeftOut = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animLeftOut.setDuration(180);
+                    animLeftOut.setInterpolator(new AccelerateInterpolator());
+                    // move in right
+                    TranslateAnimation animRightIn = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animRightIn.setDuration(180);
+                    animRightIn.setInterpolator(new AccelerateInterpolator());
+                    // move out right
+                    TranslateAnimation animRightOut = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f,
+                            Animation.RELATIVE_TO_PARENT, 0.0f);
+                    animRightOut.setDuration(180);
+                    animRightOut.setInterpolator(new AccelerateInterpolator());
 
-                if ("moveleft".equalsIgnoreCase(result)) {
-                    int currentTab = tabHost.getCurrentTab();
-                    int childCount = tabHost.getTabWidget().getChildCount();
-                    View currentView = tabHost.getCurrentView();
-                    if (currentTab > 0) {
-                        tabHost.setCurrentTab(currentTab - 1);
-                    } else {
-                        tabHost.setCurrentTab(childCount - 1);
+                    if ("moveleft".equalsIgnoreCase(result)) {
+                        int currentTab = tabHost.getCurrentTab();
+                        int childCount = tabHost.getTabWidget().getChildCount();
+                        View currentView = tabHost.getCurrentView();
+                        if (currentTab > 0) {
+                            tabHost.setCurrentTab(currentTab - 1);
+                        } else {
+                            tabHost.setCurrentTab(childCount - 1);
+                        }
+                        View nextView = tabHost.getCurrentView();
+                        currentView.setAnimation(animLeftOut);
+                        nextView.setAnimation(animLeftIn);
+                    } else if ("moveright".equalsIgnoreCase(result)) {
+                        int currentTab = tabHost.getCurrentTab();
+                        int childCount = tabHost.getTabWidget().getChildCount();
+                        View currentView = tabHost.getCurrentView();
+                        if (childCount - 1 > currentTab) {
+                            tabHost.setCurrentTab(currentTab + 1);
+                        } else {
+                            tabHost.setCurrentTab(0);
+                        }
+                        View nextView = tabHost.getCurrentView();
+                        currentView.setAnimation(animRightOut);
+                        nextView.setAnimation(animRightIn);
                     }
-                    View nextView = tabHost.getCurrentView();
-                    currentView.setAnimation(animLeftOut);
-                    nextView.setAnimation(animLeftIn);
-                } else if ("moveright".equalsIgnoreCase(result)) {
-                    int currentTab = tabHost.getCurrentTab();
-                    int childCount = tabHost.getTabWidget().getChildCount();
-                    View currentView = tabHost.getCurrentView();
-                    if (childCount - 1 > currentTab) {
-                        tabHost.setCurrentTab(currentTab + 1);
-                    } else {
-                        tabHost.setCurrentTab(0);
-                    }
-                    View nextView = tabHost.getCurrentView();
-                    currentView.setAnimation(animRightOut);
-                    nextView.setAnimation(animRightIn);
                 }
             }
         }
