@@ -20,7 +20,7 @@ public final class UIHelper {
     }
 
     public static void setFont(final Context context, final TextView view) {
-        Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/karine.ttf");
+        Typeface tf = Typeface.createFromAsset(context.getAssets(), "fonts/brigitte.ttf");
         view.setTypeface(tf);
     }
 }
