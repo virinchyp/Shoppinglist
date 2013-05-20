@@ -33,6 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -74,6 +75,7 @@ public class MainActivity extends Activity {
     private transient EditText textQuantityValue;
     private transient EditText textUuid;
     private transient Spinner spinnerQuantity;
+    private transient CheckBox checkboxImportant;
     private transient AutoCompleteTextView textDescription;
     private transient Button saveButton;
     private transient Button resetButton;
@@ -91,12 +93,13 @@ public class MainActivity extends Activity {
     }
 
     private void initCreateTabData(final String uuid, final int quantity, final int quantityUnitRes,
-            final String description) {
+            final String description, final boolean important) {
         textUuid.setText(uuid);
         spinnerQuantity.setSelection(quantityUnitRes);
         textDescription.setText(description);
         seekBar.setProgress(quantity);
         textQuantityValue.setText(String.valueOf(quantity));
+        checkboxImportant.setChecked(important);
     }
 
     private void configureNewEntryView() {
@@ -123,6 +126,7 @@ public class MainActivity extends Activity {
                         .toString());
                 String quantityUnit = (String) spinnerQuantity.getSelectedItem();
                 String description = textDescription.getText().toString();
+                Boolean important = checkboxImportant.isChecked();
 
                 Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
 
@@ -135,6 +139,7 @@ public class MainActivity extends Activity {
                 entry.setQuantity(new Quantity(quantityValue, quantityUnit));
                 entry.setDescription(description);
                 entry.setList(list);
+                entry.setImportant(important);
 
                 if (null == uuid || "".equals(uuid)) {
                     ShoppingListDataSource.getInstance(getBaseContext()).createEntry(entry);
@@ -153,7 +158,7 @@ public class MainActivity extends Activity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initCreateTabData("", 1, 0, "");
+                initCreateTabData("", 1, 0, "", false);
             }
         });
 
@@ -183,7 +188,7 @@ public class MainActivity extends Activity {
             @Override
             public void onTabChanged(String arg0) {
                 if (getResources().getString(R.string.list).equals(arg0)) {
-                    initCreateTabData("", 1, 0, "");
+                    initCreateTabData("", 1, 0, "", false);
                 }
             }
         });
@@ -249,6 +254,7 @@ public class MainActivity extends Activity {
         saveButton = (Button) findViewById(R.id.buttonSave);
         textQuantityValue = (EditText) findViewById(R.id.textViewQuantityValue);
         spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
+        checkboxImportant = (CheckBox) findViewById(R.id.checkBoxImportant);
         textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
         listView = (ListView) findViewById(R.id.listViewList);
         tabHost = (TabHost) findViewById(R.id.tabHost);
@@ -267,7 +273,7 @@ public class MainActivity extends Activity {
         configureNewEntryView();
 
         initListTabData();
-        initCreateTabData("", 1, 0, "");
+        initCreateTabData("", 1, 0, "", false);
     }
 
     /**
@@ -381,7 +387,8 @@ public class MainActivity extends Activity {
                 }
             }
 
-            initCreateTabData(entry.getUuid(), entry.getQuantity().getValue(), quantityUnitRes, entry.getDescription());
+            initCreateTabData(entry.getUuid(), entry.getQuantity().getValue(), quantityUnitRes, entry.getDescription(),
+                    entry.getImportant());
             tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
 
             result = true;
@@ -515,10 +522,10 @@ public class MainActivity extends Activity {
 
             Entry entry = (Entry) list.getAdapter().getItem(pos);
             if (Status.OPEN == entry.getStatus()) {
-                UIHelper.toggleStrikeThrough(textView, false);
+                UIHelper.toggleStrikeThrough(getBaseContext(), textView, false);
                 entry.setStatus(Status.FINISHED);
             } else {
-                UIHelper.toggleStrikeThrough(textView, true);
+                UIHelper.toggleStrikeThrough(getBaseContext(), textView, true);
                 entry.setStatus(Status.OPEN);
             }
             ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);

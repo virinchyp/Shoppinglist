@@ -18,12 +18,14 @@ public class Entry extends AbstractEntity {
     public static final String COL_QUANTITYVALUE = "quantityvalue";
     public static final String COL_QUANTITY = "quantity";
     public static final String COL_STATUS = "status";
+    public static final String COL_IMPORTANT = "important";
     public static final String COL_LIST = "list";
 
     private String description;
     private Quantity quantity;
     private Status status;
     private Shoppinglist list;
+    private Boolean important = Boolean.FALSE;
 
     /**
      * Creates a new {@link Entry}.
@@ -77,6 +79,18 @@ public class Entry extends AbstractEntity {
 
     public void setList(Shoppinglist list) {
         this.list = list;
+    }
+
+    public Boolean getImportant() {
+        return important;
+    }
+
+    public void setImportant(int important) {
+        this.important = 1 == important;
+    }
+
+    public void setImportant(Boolean important) {
+        this.important = important;
     }
 
     /**

@@ -92,9 +92,12 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
 
         Entry value = getItem(position);
         if (Status.FINISHED == value.getStatus()) {
-            UIHelper.toggleStrikeThrough(view, false);
+            UIHelper.toggleStrikeThrough(getContext(), view, false);
         } else {
-            UIHelper.toggleStrikeThrough(view, true);
+            UIHelper.toggleStrikeThrough(getContext(), view, true);
+        }
+        if (Boolean.TRUE.equals(value.getImportant())) {
+            UIHelper.markImportant(getContext(), view, value.getImportant());
         }
 
         return view;
@@ -141,6 +144,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
                 if (existingEntry.getUuid().equals(entry.getUuid())) {
                     existingEntry.setDescription(entry.getDescription());
                     existingEntry.setQuantity(entry.getQuantity());
+                    existingEntry.setImportant(entry.getImportant());
                     break;
                 }
             }

@@ -51,6 +51,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "(" + Shoppinglist.COL_ID
                 + " text primary key)");
+        db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMPORTANT + " integer not null default(0)");
     }
 
     /**
@@ -61,7 +62,6 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
     }
 
     private ShoppingListDataSource(final Context context) {
@@ -82,6 +82,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
             values.put(Entry.COL_STATUS, entry.getStatus().name());
             values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
             values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
+            values.put(Entry.COL_IMPORTANT, entry.getImportant());
             values.put(Entry.COL_LIST, entry.getList().getUuid());
 
             SQLiteDatabase database = getWritableDatabase();
@@ -109,6 +110,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
             values.put(Entry.COL_STATUS, entry.getStatus().name());
             values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
             values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
+            values.put(Entry.COL_IMPORTANT, entry.getImportant());
 
             SQLiteDatabase database = getWritableDatabase();
             database.beginTransaction();
@@ -131,8 +133,8 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         List<Entry> entries = new ArrayList<Entry>();
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.query(Entry.TABLE, new String[] { Entry.COL_ID, Entry.COL_DESCRIPTION,
-                Entry.COL_STATUS, Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_LIST }, null, null, null,
-                null, null);
+                Entry.COL_STATUS, Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_IMPORTANT, Entry.COL_LIST },
+                null, null, null, null, null);
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -140,7 +142,8 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
                     entry.setStatus(cursor.getString(2));
                     entry.setDescription(cursor.getString(1));
                     entry.setQuantity(new Quantity(cursor.getInt(3), cursor.getString(4)));
-                    entry.setList(new Shoppinglist(cursor.getString(5)));
+                    entry.setImportant(cursor.getInt(5));
+                    entry.setList(new Shoppinglist(cursor.getString(6)));
                     entries.add(entry);
                 } while (cursor.moveToNext());
             }

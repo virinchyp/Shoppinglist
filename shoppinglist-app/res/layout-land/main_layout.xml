@@ -85,36 +85,70 @@
                                 android:id="@+id/textViewQuantityValue"
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
-                                android:inputType="numberDecimal" />
+                                android:layout_alignParentLeft="true"
+                                android:inputType="numberDecimal" >
+
+                                <requestFocus />
+                            </EditText>
 
                             <Spinner
                                 android:id="@+id/spinnerQuantity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content" />
 
-                            <AutoCompleteTextView
-                                android:id="@+id/autoCompleteTextViewEntryDescription"
+                            <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="@string/description" >
+                                android:layout_gravity="bottom"
+                                android:gravity="right"
+                                android:orientation="horizontal" >
 
-                                <requestFocus />
-                            </AutoCompleteTextView>
+                                <TextView
+                                    android:labelFor="@id/checkBoxImportant"
+                                    android:id="@+id/textViewImportant"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/important" />
+
+                                <CheckBox
+                                    android:id="@+id/checkBoxImportant"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="" />
+                            </LinearLayout>
                         </view>
 
-                        <Button
-                            android:id="@+id/buttonSave"
-                            style="?android:attr/buttonStyleSmall"
+                        <AutoCompleteTextView
+                            android:id="@+id/autoCompleteTextViewEntryDescription"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/save" />
+                            android:hint="@string/description" />
 
-                        <Button
-                            android:id="@+id/buttonReset"
-                            style="?android:attr/buttonStyleSmall"
-                            android:layout_width="fill_parent"
+                        <TableLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/reset" />
+                            android:stretchColumns="0" >
+
+                            <TableRow
+                                android:id="@+id/tableRow1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" >
+
+                                <Button
+                                    android:id="@+id/buttonSave"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/save" />
+
+                                <Button
+                                    android:id="@+id/buttonReset"
+                                    style="?android:attr/buttonStyleSmall"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/reset" />
+                            </TableRow>
+                        </TableLayout>
 
                         <EditText
                             android:id="@+id/textViewUuid"
@@ -125,7 +159,6 @@
                     </LinearLayout>
                 </android.gesture.GestureOverlayView>
             </LinearLayout>
-
         </FrameLayout>
     </RelativeLayout>
 
