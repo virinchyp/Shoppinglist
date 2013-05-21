@@ -18,7 +18,7 @@ import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
 public class ShoppingListDataSource extends SQLiteOpenHelper {
 
     private static final String SHOPPINGLIST_DB_NAME = "shoppinglist.db";
-    private static final Integer SHOPPINGLIST_DB_VERSION = 1;
+    private static final Integer SHOPPINGLIST_DB_VERSION = 2;
     private static ShoppingListDataSource datasource = null;
 
     /**
@@ -51,7 +51,6 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Shoppinglist.TABLE + "(" + Shoppinglist.COL_ID
                 + " text primary key)");
-        db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMPORTANT + " integer not null default(0)");
     }
 
     /**
@@ -62,6 +61,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMPORTANT + " integer not null default(0)");
     }
 
     private ShoppingListDataSource(final Context context) {

@@ -27,29 +27,6 @@
             android:layout_marginTop="10dp" >
 
             <LinearLayout
-                android:id="@+id/tab1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:paddingTop="60dp" >
-
-                <android.gesture.GestureOverlayView
-                    android:id="@+id/gestureOverlayTab1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:duplicateParentState="false"
-                    android:gestureColor="#00000000"
-                    android:uncertainGestureColor="#00000000" >
-
-                    <ListView
-                        android:id="@+id/listViewList"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent" >
-                    </ListView>
-                </android.gesture.GestureOverlayView>
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/tab2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -86,10 +63,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
-                                android:inputType="numberDecimal" >
-
-                                <requestFocus />
-                            </EditText>
+                                android:inputType="numberDecimal" />
 
                             <Spinner
                                 android:id="@+id/spinnerQuantity"
@@ -104,7 +78,6 @@
                                 android:orientation="horizontal" >
 
                                 <TextView
-                                    android:labelFor="@id/checkBoxImportant"
                                     android:id="@+id/textViewImportant"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -157,6 +130,29 @@
                             android:inputType="text"
                             android:visibility="invisible" />
                     </LinearLayout>
+                </android.gesture.GestureOverlayView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tab1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:paddingTop="60dp" >
+
+                <android.gesture.GestureOverlayView
+                    android:id="@+id/gestureOverlayTab1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:duplicateParentState="false"
+                    android:gestureColor="#00000000"
+                    android:uncertainGestureColor="#00000000" >
+
+                    <ListView
+                        android:id="@+id/listViewList"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent" >
+                    </ListView>
                 </android.gesture.GestureOverlayView>
             </LinearLayout>
         </FrameLayout>
