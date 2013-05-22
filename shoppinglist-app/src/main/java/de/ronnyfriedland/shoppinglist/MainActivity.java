@@ -403,7 +403,6 @@ public class MainActivity extends Activity {
      */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt(CURRENT_TAB, tabHost.getCurrentTab());
     }
 
@@ -414,7 +413,6 @@ public class MainActivity extends Activity {
      */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
         tabHost.setCurrentTab(savedInstanceState.getInt(CURRENT_TAB));
     }
 
