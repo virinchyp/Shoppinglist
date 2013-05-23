@@ -24,6 +24,9 @@ public final class UIHelper {
         if (important) {
             view.setPaintFlags(view.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
             view.setTextColor(context.getResources().getColor(R.color.important));
+        } else {
+            view.setPaintFlags(view.getPaintFlags() & ~Paint.FAKE_BOLD_TEXT_FLAG);
+            view.setTextColor(context.getResources().getColor(android.R.color.black));
         }
     }
 
