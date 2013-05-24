@@ -22,7 +22,18 @@
 			<artifactId>shoppinglist-common</artifactId>
 			<version>${parent.version}</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>de.kerron</groupId>
+			<artifactId>shoppinglist-client</artifactId>
+			<version>${parent.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-configuration</artifactId>
+					<groupId>commons-configuration</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+			</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
