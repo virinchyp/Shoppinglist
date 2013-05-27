@@ -43,6 +43,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.ronnyfriedland.shoppinglist.adapter.ShoppingListAdapter;
 import de.ronnyfriedland.shoppinglist.db.ShoppingListDataSource;
 import de.ronnyfriedland.shoppinglist.entity.Entry;
@@ -211,17 +212,24 @@ public class MainActivity extends Activity {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.i(getClass().getCanonicalName(), "Clear list");
+                        if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+                            Log.d(getClass().getSimpleName(), "Clear list");
+                        }
                         Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
                         ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(list);
                         ShoppingListDataSource.getInstance(getBaseContext()).deleteList();
                         ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
                         ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+
+                        Toast.makeText(getBaseContext(), getResources().getString(R.string.deleteSuccess),
+                                Toast.LENGTH_LONG).show();
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Log.i(getClass().getCanonicalName(), "Clear list canceled");
+                        if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+                            Log.d(getClass().getSimpleName(), "Clear list canceled");
+                        }
                     }
                 }).create();
         dialog.show();
@@ -232,7 +240,9 @@ public class MainActivity extends Activity {
         for (int i = 0; i < listView.getAdapter().getCount(); i++) {
             Entry entry = (Entry) listView.getAdapter().getItem(i);
             if (Status.FINISHED.equals(entry.getStatus())) {
-                Log.d(getClass().getCanonicalName(), String.format("Delete entry with id %s.", entry.getUuid()));
+                if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+                    Log.d(getClass().getSimpleName(), String.format("Delete entry with id %s.", entry.getUuid()));
+                }
                 ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(entry);
             } else {
                 entries.add(entry);
@@ -244,6 +254,9 @@ public class MainActivity extends Activity {
         ((ShoppingListAdapter<Entry>) listView.getAdapter()).clear();
         ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
         ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+
+        Toast.makeText(getBaseContext(), getResources().getString(R.string.clearEntriesSuccess), Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -287,7 +300,7 @@ public class MainActivity extends Activity {
         try {
             ret = gestureScanner.onTouchEvent(me);
         } catch (Exception e) {
-            Log.e(getClass().getCanonicalName(), "Got exception on touch event.", e);
+            Log.e(getClass().getSimpleName(), "Got exception on touch event.", e);
         }
         return ret;
     }
@@ -369,7 +382,9 @@ public class MainActivity extends Activity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Entry entry = (Entry) listView.getAdapter().getItem(info.position);
         if (item.getTitle() == getResources().getString(R.string.delete)) {
-            Log.d(getClass().getCanonicalName(), String.format("Delete entry with id %s.", entry.getUuid()));
+            if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+                Log.d(getClass().getSimpleName(), String.format("Delete entry with id %s.", entry.getUuid()));
+            }
 
             ShoppingListDataSource.getInstance(getBaseContext()).deleteEntry(entry);
             ((ShoppingListAdapter<Entry>) listView.getAdapter()).remove(entry);
@@ -377,8 +392,9 @@ public class MainActivity extends Activity {
 
             result = true;
         } else if (item.getTitle() == getResources().getString(R.string.edit)) {
-            Log.d(getClass().getCanonicalName(), String.format("Edit entry with id %s.", entry.getUuid()));
-
+            if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+                Log.d(getClass().getSimpleName(), String.format("Edit entry with id %s.", entry.getUuid()));
+            }
             int quantityUnitRes = 0;
             String[] quantity = getResources().getStringArray(R.array.quantity);
             for (int i = 0; i < quantity.length; i++) {

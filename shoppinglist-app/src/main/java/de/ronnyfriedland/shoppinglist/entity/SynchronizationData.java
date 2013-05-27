@@ -7,6 +7,11 @@ import java.util.UUID;
  */
 public class SynchronizationData extends AbstractEntity {
 
+    public static final String TABLE = "Syncdata";
+    public static final String COL_ID = "id";
+    public static final String COL_USERNAME = "username";
+    public static final String COL_CODE = "code";
+
     private String username;
     private String code;
 
