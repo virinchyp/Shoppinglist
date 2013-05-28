@@ -18,6 +18,7 @@
     <string name="description">Beschreibung</string>
     <string name="confirmDelete">Einträge löschen?</string>
     <string name="deleteSuccess">Einträge gelöscht</string>
+    <string name="notificationImportantEntryCount">Liste enthält wichtige Einträge</string>
     <string name="empty"></string>
     
     <string-array name="quantity">

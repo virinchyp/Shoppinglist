@@ -1,11 +1,16 @@
 package de.ronnyfriedland.shoppinglist;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -287,6 +292,40 @@ public class MainActivity extends Activity {
 
         initListTabData();
         initCreateTabData("", 1, 0, "", false);
+
+        initTimer();
+    }
+
+    private void initTimer() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        Timer notificationTimer = new Timer();
+        notificationTimer.schedule(new TimerTask() {
+            /**
+             * {@inheritDoc}
+             * 
+             * @see java.util.TimerTask#run()
+             */
+            @Override
+            public void run() {
+                int importantCount = 0;
+                List<Entry> entries = ShoppingListDataSource.getInstance(getBaseContext()).getEntries();
+                for (Entry entry : entries) {
+                    if (entry.getImportant()) {
+                        importantCount++;
+                    }
+                }
+                if (0 < importantCount) {
+                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(
+                            R.string.app_name), Calendar.getInstance().getTimeInMillis());
+                    notification.setLatestEventInfo(getBaseContext(), getResources().getString(R.string.app_name),
+                            getResources().getString(R.string.notificationImportantEntryCount), null);
+                    notificationManager.notify(0, notification);
+                }
+            }
+        }, cal.getTime(), 1000 * 60 * 60 * 24); // show every day
+
     }
 
     /**
