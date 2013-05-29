@@ -11,6 +11,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -19,6 +21,7 @@ import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
@@ -70,6 +73,9 @@ public class MainActivity extends Activity {
     // gestures
     private GestureDetector gestureScanner;
     private GestureLibrary gestureLib;
+
+    // notification
+    private NotificationManager notificationManager;
 
     // common (tab)
     private transient TabHost tabHost;
@@ -283,9 +289,9 @@ public class MainActivity extends Activity {
         gestureOverlayTab2 = (GestureOverlayView) findViewById(R.id.gestureOverlayTab2);
 
         gestureLib = GestureLibraries.fromRawResource(getBaseContext(), R.raw.gestures);
-        if (!gestureLib.load()) {
-            finish();
-        }
+
+        notificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
         configureTabs();
         configureListView();
         configureNewEntryView();
@@ -311,16 +317,18 @@ public class MainActivity extends Activity {
                 int importantCount = 0;
                 List<Entry> entries = ShoppingListDataSource.getInstance(getBaseContext()).getEntries();
                 for (Entry entry : entries) {
-                    if (entry.getImportant()) {
+                    if (entry.getImportant() && Status.OPEN.equals(entry.getStatus())) {
                         importantCount++;
                     }
                 }
-                if (0 < importantCount) {
-                    NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                    Notification notification = new Notification(R.drawable.ic_launcher, getResources().getString(
-                            R.string.app_name), Calendar.getInstance().getTimeInMillis());
-                    notification.setLatestEventInfo(getBaseContext(), getResources().getString(R.string.app_name),
-                            getResources().getString(R.string.notificationImportantEntryCount), null);
+                if (0 < importantCount) { // only if important entries found
+                    PendingIntent contentIntent = PendingIntent.getActivity(getBaseContext(), 0, getIntent(), 0);
+                    Notification notification = new NotificationCompat.Builder(getBaseContext())
+                            .setContentTitle(getResources().getString(R.string.app_name))
+                            .setContentText(getResources().getString(R.string.notificationImportantEntryCount))
+                            .setSmallIcon(R.drawable.ic_launcher).setContentIntent(contentIntent)
+                            .setOnlyAlertOnce(true).build();
+                    notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
                     notificationManager.notify(0, notification);
                 }
             }
