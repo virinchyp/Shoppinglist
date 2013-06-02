@@ -18,14 +18,21 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.google.android</groupId>
+			<artifactId>support-v4</artifactId>
+			<version>4</version>
+			<scope>system</scope>
+			<systemPath>${env.ANDROID_HOME}/extras/android/support/v4/android-support-v4.jar</systemPath>
+		</dependency>
+		<dependency>
 			<groupId>de.kerron</groupId>
 			<artifactId>shoppinglist-common</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.kerron</groupId>
 			<artifactId>shoppinglist-client</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-configuration</artifactId>
@@ -33,7 +40,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-			</dependencies>
+	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
@@ -42,7 +49,7 @@
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
 				<artifactId>android-maven-plugin</artifactId>
-				<version>3.5.3</version>
+				<version>3.6.0</version>
 				<extensions>true</extensions>
 				<configuration>
 					<sdk>
