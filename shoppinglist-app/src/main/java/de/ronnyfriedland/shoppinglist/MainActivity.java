@@ -125,7 +125,7 @@ public class MainActivity extends Activity {
         spinnerQuantity.setAdapter(adapter);
 
         Collection<String> list = ReadXMLFile.parseFile(getResources().getString(R.raw.description));
-        textDescription.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, list
+        textDescription.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list
                 .toArray(new String[list.size()])));
 
         saveButton.setOnClickListener(new View.OnClickListener() {
