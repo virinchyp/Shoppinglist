@@ -99,6 +99,7 @@
                             android:id="@+id/autoCompleteTextViewEntryDescription"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
                             android:hint="@string/description" />
 
                         <CheckBox
