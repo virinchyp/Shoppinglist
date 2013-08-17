@@ -102,6 +102,7 @@ public class MainActivity extends Activity {
         List<Entry> entries = new ArrayList<Entry>();
         entries.addAll(ShoppingListDataSource.getInstance(getBaseContext()).getEntries());
         ((ShoppingListAdapter<Entry>) listView.getAdapter()).addAll(entries);
+        ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
     }
 
     private void initCreateTabData(final String uuid, final int quantity, final int quantityUnitRes,

@@ -2,6 +2,8 @@ package de.ronnyfriedland.shoppinglist.adapter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import android.content.Context;
@@ -157,5 +159,26 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
     @Override
     public void clear() {
         entries.clear();
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * @see android.widget.ArrayAdapter#notifyDataSetChanged()
+     */
+    @Override
+    public void notifyDataSetChanged() {
+        Collections.sort(entries, new Comparator<T>() {
+            /**
+             * {@inheritDoc}
+             * 
+             * @see java.util.Comparator#compare(java.lang.Object,
+             *      java.lang.Object)
+             */
+            public int compare(T lhs, T rhs) {
+                return rhs.getImportant().compareTo(lhs.getImportant());
+            };
+        });
+        super.notifyDataSetChanged();
     }
 }
