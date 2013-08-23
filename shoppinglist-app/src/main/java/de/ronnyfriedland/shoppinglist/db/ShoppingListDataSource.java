@@ -58,6 +58,8 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + SynchronizationData.TABLE + "(" + SynchronizationData.COL_ID
                 + " text primary key, " + SynchronizationData.COL_USERNAME + " text not null,"
                 + SynchronizationData.COL_CODE + " text not null)");
+
+        db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMAGE + " blob");
     }
 
     /**
@@ -68,14 +70,15 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion > 2) {
+        if (oldVersion < 2) {
             db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMPORTANT
                     + " integer not null default(0)");
         }
-        if (oldVersion > 3) {
+        if (oldVersion < 3) {
             db.execSQL("CREATE TABLE IF NOT EXISTS " + SynchronizationData.TABLE + "(" + SynchronizationData.COL_ID
                     + " text primary key, " + SynchronizationData.COL_USERNAME + " text not null,"
                     + SynchronizationData.COL_CODE + " text not null)");
+            db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMAGE + " blob");
         }
     }
 
@@ -99,6 +102,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
             values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
             values.put(Entry.COL_IMPORTANT, entry.getImportant());
             values.put(Entry.COL_LIST, entry.getList().getUuid());
+            values.put(Entry.COL_IMAGE, entry.getImage());
 
             SQLiteDatabase database = getWritableDatabase();
             database.beginTransaction();
@@ -126,6 +130,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
             values.put(Entry.COL_QUANTITYVALUE, entry.getQuantity().getValue());
             values.put(Entry.COL_QUANTITY, entry.getQuantity().getUnit());
             values.put(Entry.COL_IMPORTANT, entry.getImportant());
+            values.put(Entry.COL_IMAGE, entry.getImage());
 
             SQLiteDatabase database = getWritableDatabase();
             database.beginTransaction();
@@ -148,8 +153,8 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
         List<Entry> entries = new ArrayList<Entry>();
         SQLiteDatabase database = getReadableDatabase();
         Cursor cursor = database.query(Entry.TABLE, new String[] { Entry.COL_ID, Entry.COL_DESCRIPTION,
-                Entry.COL_STATUS, Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_IMPORTANT, Entry.COL_LIST },
-                null, null, null, null, null);
+                Entry.COL_STATUS, Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_IMPORTANT, Entry.COL_LIST,
+                Entry.COL_IMAGE }, null, null, null, null, null);
         try {
             if (cursor.moveToFirst()) {
                 do {
@@ -159,6 +164,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
                     entry.setQuantity(new Quantity(cursor.getInt(3), cursor.getString(4)));
                     entry.setImportant(cursor.getInt(5));
                     entry.setList(new Shoppinglist(cursor.getString(6)));
+                    entry.setImage(cursor.getBlob(7));
                     entries.add(entry);
                 } while (cursor.moveToNext());
             }

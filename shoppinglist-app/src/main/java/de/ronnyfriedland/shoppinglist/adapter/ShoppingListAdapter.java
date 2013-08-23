@@ -145,6 +145,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
                     existingEntry.setDescription(entry.getDescription());
                     existingEntry.setQuantity(entry.getQuantity());
                     existingEntry.setImportant(entry.getImportant());
+                    existingEntry.setImage(entry.getImage());
                     break;
                 }
             }

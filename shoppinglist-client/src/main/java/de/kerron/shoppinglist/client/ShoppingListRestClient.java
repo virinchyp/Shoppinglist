@@ -49,7 +49,7 @@ public final class ShoppingListRestClient {
      * @return success Status
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public boolean addData(final String id, final String description, final String quantityValue,
+    public boolean create(final String id, final String description, final String quantityValue,
             final String quantityUnit, final String list) {
         if (null == id) {
             throw new IllegalArgumentException("id must not be null");
@@ -71,7 +71,42 @@ public final class ShoppingListRestClient {
         formData.add("id", id);
         // doPost
         WebResource service = client.resource(getBaseURI());
-        ClientResponse response = service.path("add").queryParams(formData).accept(MediaType.TEXT_PLAIN)
+        ClientResponse response = service.path("create").queryParams(formData).accept(MediaType.TEXT_PLAIN)
+                .post(ClientResponse.class);
+        return 200 == response.getStatus();
+    }
+
+    /**
+     * Aktualisiert Daten auf dem Server
+     * 
+     * @param entry
+     *            die Daten
+     * @return success Status
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public boolean update(final String id, final String description, final String quantityValue,
+            final String quantityUnit, final String list) {
+        if (null == id) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+        if (null == description) {
+            throw new IllegalArgumentException("description must not be null");
+        }
+        if (null == quantityValue) {
+            throw new IllegalArgumentException("quantityValue must not be null");
+        }
+        if (null == quantityUnit) {
+            throw new IllegalArgumentException("quantityUnit must not be null");
+        }
+        if (null == list) {
+            throw new IllegalArgumentException("list must not be null");
+        }
+        // prepare post data
+        MultivaluedMap formData = new MultivaluedMapImpl();
+        formData.add("id", id);
+        // doPost
+        WebResource service = client.resource(getBaseURI());
+        ClientResponse response = service.path("update").queryParams(formData).accept(MediaType.TEXT_PLAIN)
                 .post(ClientResponse.class);
         return 200 == response.getStatus();
     }
@@ -83,7 +118,7 @@ public final class ShoppingListRestClient {
      *            die zu löschenden Daten
      * @return success Status
      */
-    public boolean deleteData(final String id) {
+    public boolean delete(final String id) {
         if (null == id) {
             throw new IllegalArgumentException("id must not be null");
         }

@@ -19,6 +19,7 @@ public class Entry extends AbstractEntity {
     public static final String COL_QUANTITY = "quantity";
     public static final String COL_STATUS = "status";
     public static final String COL_IMPORTANT = "important";
+    public static final String COL_IMAGE = "image";
     public static final String COL_LIST = "list";
 
     private String description;
@@ -26,6 +27,7 @@ public class Entry extends AbstractEntity {
     private Status status;
     private Shoppinglist list;
     private Boolean important = Boolean.FALSE;
+    private byte[] image;
 
     /**
      * Creates a new {@link Entry}.
@@ -91,6 +93,14 @@ public class Entry extends AbstractEntity {
 
     public void setImportant(Boolean important) {
         this.important = important;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     /**

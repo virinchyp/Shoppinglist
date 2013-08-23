@@ -6,6 +6,7 @@
     <string name="create">Neu</string>
     <string name="save">Speichern</string>
     <string name="reset">Zurücksetzen</string>
+    <string name="show">Bild anzeigen</string>
     <string name="edit">Bearbeiten</string>
     <string name="delete">Löschen</string>
     <string name="exit">Beenden</string>
@@ -19,6 +20,7 @@
     <string name="confirmDelete">Einträge löschen?</string>
     <string name="deleteSuccess">Einträge gelöscht</string>
     <string name="notificationImportantEntryCount">Liste enthält wichtige Einträge</string>
+    <string name="noImage">Kein Bild hinterlegt</string>
     <string name="empty"></string>
     
     <string-array name="quantity">

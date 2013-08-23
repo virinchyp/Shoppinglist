@@ -1,5 +1,6 @@
 package de.ronnyfriedland.shoppinglist;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -9,17 +10,25 @@ import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.text.Editable;
@@ -43,6 +52,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -89,9 +100,12 @@ public class MainActivity extends Activity {
     private transient Spinner spinnerQuantity;
     private transient CheckBox checkboxImportant;
     private transient AutoCompleteTextView textDescription;
+    private transient Button imageButton;
     private transient Button saveButton;
     private transient Button resetButton;
     private transient GestureOverlayView gestureOverlayTab2;
+
+    private transient Bitmap image;
 
     private void initListTabData() {
         Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
@@ -154,6 +168,12 @@ public class MainActivity extends Activity {
                 entry.setList(list);
                 entry.setImportant(important);
 
+                if (null != image) {
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream(image.getWidth() * image.getHeight());
+                    image.compress(CompressFormat.PNG, 100, buffer);
+                    entry.setImage(buffer.toByteArray());
+                }
+
                 if (null == uuid || "".equals(uuid)) {
                     ShoppingListDataSource.getInstance(getBaseContext()).createEntry(entry);
                     ((ShoppingListAdapter<Entry>) listView.getAdapter()).add(entry);
@@ -172,6 +192,23 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 initCreateTabData("", 1, 0, "", false);
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final PackageManager pm = getBaseContext().getPackageManager();
+                if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                    final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    new AsyncTask<Void, Void, Integer>() {
+                        @Override
+                        protected Integer doInBackground(Void... params) {
+                            startActivityForResult(cameraIntent, CameraActivity.RESULT_OK);
+                            return CameraActivity.RESULT_OK;
+                        }
+                    }.execute();
+                }
             }
         });
 
@@ -281,6 +318,7 @@ public class MainActivity extends Activity {
         spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
         checkboxImportant = (CheckBox) findViewById(R.id.checkBoxImportant);
         textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
+        imageButton = (Button) findViewById(R.id.imageButton);
         listView = (ListView) findViewById(R.id.listViewList);
         tabHost = (TabHost) findViewById(R.id.tabHost);
         resetButton = (Button) findViewById(R.id.buttonReset);
@@ -301,6 +339,13 @@ public class MainActivity extends Activity {
         initCreateTabData("", 1, 0, "", false);
 
         initTimer();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CameraActivity.RESULT_OK) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            image = bitmap;
+        }
     }
 
     private void initTimer() {
@@ -385,8 +430,9 @@ public class MainActivity extends Activity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         // menu.setHeaderTitle("Context Menu");
-        menu.add(0, v.getId(), 0, getResources().getString(R.string.delete));
+        menu.add(0, v.getId(), 0, getResources().getString(R.string.show));
         menu.add(0, v.getId(), 1, getResources().getString(R.string.edit));
+        menu.add(0, v.getId(), 2, getResources().getString(R.string.delete));
     }
 
     /**
@@ -456,6 +502,28 @@ public class MainActivity extends Activity {
             tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
 
             result = true;
+        } else if (item.getTitle() == getResources().getString(R.string.show)) {
+            if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
+                Log.d(getClass().getSimpleName(), String.format("Show image for entry with id %s.", entry.getUuid()));
+            }
+            byte[] image = entry.getImage();
+
+            if (null != image) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
+                ImageView pictureView = new ImageView(getBaseContext());
+                pictureView.setScaleType(ScaleType.FIT_XY);
+                pictureView.setImageBitmap(bitmap);
+                // build dialog
+                Builder builder = new AlertDialog.Builder(this);
+                builder.setView(pictureView);
+
+                Dialog dialog = builder.create();
+                dialog.show();
+                result = true;
+            } else {
+                Toast.makeText(getBaseContext(), R.string.noImage, Toast.LENGTH_SHORT).show();
+                result = false;
+            }
         }
         return result;
     }

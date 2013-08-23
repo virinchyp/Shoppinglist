@@ -99,14 +99,20 @@
                             android:id="@+id/autoCompleteTextViewEntryDescription"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
-                            android:hint="@string/description" />
+                            android:hint="@string/description"
+                            android:textColor="@android:color/black" />
 
                         <CheckBox
                             android:id="@+id/checkBoxImportant"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/important" />
+
+                        <Button
+                            android:id="@+id/imageButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Bild hinzufügen" />
 
                         <Button
                             android:id="@+id/buttonSave"
@@ -128,6 +134,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:visibility="invisible" />
+
                     </LinearLayout>
                 </android.gesture.GestureOverlayView>
             </LinearLayout>
