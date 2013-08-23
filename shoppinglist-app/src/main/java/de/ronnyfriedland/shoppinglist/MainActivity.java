@@ -52,6 +52,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
@@ -100,7 +101,7 @@ public class MainActivity extends Activity {
     private transient Spinner spinnerQuantity;
     private transient CheckBox checkboxImportant;
     private transient AutoCompleteTextView textDescription;
-    private transient Button imageButton;
+    private transient ImageButton imageButton;
     private transient Button saveButton;
     private transient Button resetButton;
     private transient GestureOverlayView gestureOverlayTab2;
@@ -318,7 +319,7 @@ public class MainActivity extends Activity {
         spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
         checkboxImportant = (CheckBox) findViewById(R.id.checkBoxImportant);
         textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
-        imageButton = (Button) findViewById(R.id.imageButton);
+        imageButton = (ImageButton) findViewById(R.id.imageButton);
         listView = (ListView) findViewById(R.id.listViewList);
         tabHost = (TabHost) findViewById(R.id.tabHost);
         resetButton = (Button) findViewById(R.id.buttonReset);

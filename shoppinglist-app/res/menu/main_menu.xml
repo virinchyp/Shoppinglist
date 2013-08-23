@@ -9,13 +9,15 @@
             android:id="@+id/clearlistItems"
             android:menuCategory="secondary"
             android:showAsAction="never"
-            android:title="@string/clearList">
+            android:title="@string/clearList"
+            android:icon="@android:drawable/ic_menu_delete">
         </item>
         <item
             android:id="@+id/clearFinishedItems"
             android:menuCategory="secondary"
             android:showAsAction="never"
-            android:title="@string/clearEntries">
+            android:title="@string/clearEntries"
+            android:icon="@android:drawable/ic_menu_rotate">
         </item>
         <!--item
             android:id="@+id/sendList"
@@ -27,7 +29,8 @@
             android:id="@+id/exit"
             android:menuCategory="secondary"
             android:showAsAction="ifRoom"
-            android:title="@string/exit" android:icon="@android:drawable/ic_lock_power_off">
+            android:title="@string/exit" 
+            android:icon="@android:drawable/ic_lock_power_off">
         </item>
     </group>
 
