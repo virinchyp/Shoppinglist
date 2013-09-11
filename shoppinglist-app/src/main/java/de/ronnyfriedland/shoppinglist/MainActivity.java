@@ -18,7 +18,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -28,8 +28,9 @@ import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.text.Editable;
 import android.text.Selection;
@@ -52,7 +53,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.ListView;
@@ -98,15 +98,13 @@ public class MainActivity extends Activity {
     private transient SeekBar seekBar;
     private transient EditText textQuantityValue;
     private transient EditText textUuid;
+    private transient EditText textImage;
     private transient Spinner spinnerQuantity;
     private transient CheckBox checkboxImportant;
     private transient AutoCompleteTextView textDescription;
-    private transient ImageButton imageButton;
     private transient Button saveButton;
     private transient Button resetButton;
     private transient GestureOverlayView gestureOverlayTab2;
-
-    private transient Bitmap image;
 
     private void initListTabData() {
         Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
@@ -121,8 +119,9 @@ public class MainActivity extends Activity {
     }
 
     private void initCreateTabData(final String uuid, final int quantity, final int quantityUnitRes,
-            final String description, final boolean important) {
+            final String description, final String imagePath, final boolean important) {
         textUuid.setText(uuid);
+        textImage.setText(imagePath);
         spinnerQuantity.setSelection(quantityUnitRes);
         textDescription.setText(description);
         seekBar.setProgress(quantity);
@@ -146,8 +145,9 @@ public class MainActivity extends Activity {
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 String uuid = textUuid.getText().toString();
+                String imagePath = textImage.getText().toString();
                 String quantity = textQuantityValue.getText().toString();
 
                 Integer quantityValue = "".equals(quantity) ? 0 : Integer.valueOf(textQuantityValue.getText()
@@ -162,16 +162,17 @@ public class MainActivity extends Activity {
                 if (null == uuid || "".equals(uuid)) {
                     entry = new Entry();
                 } else {
-                    entry = new Entry(uuid);
+                    entry = ShoppingListDataSource.getInstance(getBaseContext()).getEntry(uuid);
                 }
                 entry.setQuantity(new Quantity(quantityValue, quantityUnit));
                 entry.setDescription(description);
                 entry.setList(list);
                 entry.setImportant(important);
 
-                if (null != image) {
+                if (null != imagePath && !"".equals(imagePath)) {
+                    Bitmap image = BitmapFactory.decodeFile(imagePath);
                     ByteArrayOutputStream buffer = new ByteArrayOutputStream(image.getWidth() * image.getHeight());
-                    image.compress(CompressFormat.PNG, 100, buffer);
+                    image.compress(CompressFormat.PNG, 90, buffer);
                     entry.setImage(buffer.toByteArray());
                 }
 
@@ -191,25 +192,8 @@ public class MainActivity extends Activity {
 
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                initCreateTabData("", 1, 0, "", false);
-            }
-        });
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final PackageManager pm = getBaseContext().getPackageManager();
-                if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
-                    final Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    new AsyncTask<Void, Void, Integer>() {
-                        @Override
-                        protected Integer doInBackground(Void... params) {
-                            startActivityForResult(cameraIntent, CameraActivity.RESULT_OK);
-                            return CameraActivity.RESULT_OK;
-                        }
-                    }.execute();
-                }
+            public void onClick(final View v) {
+                initCreateTabData("", 1, 0, "", "", false);
             }
         });
 
@@ -237,9 +221,9 @@ public class MainActivity extends Activity {
              * @see android.widget.TabHost.OnTabChangeListener#onTabChanged(java.lang.String)
              */
             @Override
-            public void onTabChanged(String arg0) {
+            public void onTabChanged(final String arg0) {
                 if (getResources().getString(R.string.list).equals(arg0)) {
-                    initCreateTabData("", 1, 0, "", false);
+                    initCreateTabData("", 1, 0, "", "", false);
                 }
             }
         });
@@ -261,7 +245,7 @@ public class MainActivity extends Activity {
         AlertDialog dialog = builder.setMessage(R.string.confirmDelete)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(final DialogInterface dialog, final int id) {
                         if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
                             Log.d(getClass().getSimpleName(), "Clear list");
                         }
@@ -276,7 +260,7 @@ public class MainActivity extends Activity {
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(final DialogInterface dialog, final int id) {
                         if (Log.isLoggable(getClass().getSimpleName(), Log.DEBUG)) {
                             Log.d(getClass().getSimpleName(), "Clear list canceled");
                         }
@@ -310,7 +294,7 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
@@ -319,12 +303,12 @@ public class MainActivity extends Activity {
         spinnerQuantity = (Spinner) findViewById(R.id.spinnerQuantity);
         checkboxImportant = (CheckBox) findViewById(R.id.checkBoxImportant);
         textDescription = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewEntryDescription);
-        imageButton = (ImageButton) findViewById(R.id.imageButton);
         listView = (ListView) findViewById(R.id.listViewList);
         tabHost = (TabHost) findViewById(R.id.tabHost);
         resetButton = (Button) findViewById(R.id.buttonReset);
         seekBar = (SeekBar) findViewById(R.id.seekBarQuantityValue);
         textUuid = (EditText) findViewById(R.id.textViewUuid);
+        textImage = (EditText) findViewById(R.id.textViewImage);
         gestureOverlayTab1 = (GestureOverlayView) findViewById(R.id.gestureOverlayTab1);
         gestureOverlayTab2 = (GestureOverlayView) findViewById(R.id.gestureOverlayTab2);
 
@@ -337,15 +321,28 @@ public class MainActivity extends Activity {
         configureNewEntryView();
 
         initListTabData();
-        initCreateTabData("", 1, 0, "", false);
-
+        initCreateTabData("", 1, 0, "", "", false);
         initTimer();
+        initImage();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CameraActivity.RESULT_OK) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-            image = bitmap;
+    private void initImage() {
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                if (imageUri != null) {
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = getContentResolver().query(imageUri, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    initCreateTabData("", 1, 0, "", cursor.getString(columnIndex), false);
+                    tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
+                }
+            }
         }
     }
 
@@ -389,7 +386,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
      */
     @Override
-    public boolean onTouchEvent(MotionEvent me) {
+    public boolean onTouchEvent(final MotionEvent me) {
         boolean ret = false;
         try {
             ret = gestureScanner.onTouchEvent(me);
@@ -405,7 +402,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
@@ -428,7 +425,7 @@ public class MainActivity extends Activity {
      *      android.view.View, android.view.ContextMenu.ContextMenuInfo)
      */
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         // menu.setHeaderTitle("Context Menu");
         menu.add(0, v.getId(), 0, getResources().getString(R.string.show));
@@ -442,7 +439,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(final MenuItem item) {
         boolean ret;
         switch (item.getItemId()) {
         case R.id.exit:
@@ -472,7 +469,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
      */
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(final MenuItem item) {
         boolean result = false;
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Entry entry = (Entry) listView.getAdapter().getItem(info.position);
@@ -499,7 +496,7 @@ public class MainActivity extends Activity {
             }
 
             initCreateTabData(entry.getUuid(), entry.getQuantity().getValue(), quantityUnitRes, entry.getDescription(),
-                    entry.getImportant());
+                    "", entry.getImportant());
             tabHost.setCurrentTabByTag(getResources().getString(R.string.create));
 
             result = true;
@@ -514,10 +511,12 @@ public class MainActivity extends Activity {
                 ImageView pictureView = new ImageView(getBaseContext());
                 pictureView.setScaleType(ScaleType.FIT_XY);
                 pictureView.setImageBitmap(bitmap);
+                pictureView.setMinimumWidth(bitmap.getHeight());
+                pictureView.setMinimumHeight(bitmap.getWidth());
                 // build dialog
                 Builder builder = new AlertDialog.Builder(this);
                 builder.setView(pictureView);
-
+                // show dialog
                 Dialog dialog = builder.create();
                 dialog.show();
                 result = true;
@@ -535,7 +534,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onSaveInstanceState(android.os.Bundle)
      */
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(final Bundle savedInstanceState) {
         savedInstanceState.putInt(CURRENT_TAB, tabHost.getCurrentTab());
     }
 
@@ -545,7 +544,7 @@ public class MainActivity extends Activity {
      * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
      */
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         tabHost.setCurrentTab(savedInstanceState.getInt(CURRENT_TAB));
     }
 
@@ -563,7 +562,7 @@ public class MainActivity extends Activity {
          *      int, boolean)
          */
         @Override
-        public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+        public void onProgressChanged(final SeekBar arg0, final int arg1, final boolean arg2) {
             EditText textAction = (EditText) findViewById(R.id.textViewQuantityValue);
             textAction.setText(String.valueOf(arg1));
         }
@@ -574,7 +573,7 @@ public class MainActivity extends Activity {
          * @see android.widget.SeekBar.OnSeekBarChangeListener#onStartTrackingTouch(android.widget.SeekBar)
          */
         @Override
-        public void onStartTrackingTouch(SeekBar arg0) {
+        public void onStartTrackingTouch(final SeekBar arg0) {
             // nothing to do
         }
 
@@ -584,7 +583,7 @@ public class MainActivity extends Activity {
          * @see android.widget.SeekBar.OnSeekBarChangeListener#onStopTrackingTouch(android.widget.SeekBar)
          */
         @Override
-        public void onStopTrackingTouch(SeekBar arg0) {
+        public void onStopTrackingTouch(final SeekBar arg0) {
             // nothing to do
         }
     }
@@ -601,7 +600,7 @@ public class MainActivity extends Activity {
          * @see android.text.TextWatcher#afterTextChanged(android.text.Editable)
          */
         @Override
-        public void afterTextChanged(Editable arg0) {
+        public void afterTextChanged(final Editable arg0) {
             int position = arg0.length();
             Selection.setSelection(arg0, position);
         }
@@ -613,7 +612,7 @@ public class MainActivity extends Activity {
          *      int, int, int)
          */
         @Override
-        public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+        public void beforeTextChanged(final CharSequence arg0, final int arg1, final int arg2, final int arg3) {
             // nothing to do
         }
 
@@ -624,7 +623,7 @@ public class MainActivity extends Activity {
          *      int, int, int)
          */
         @Override
-        public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+        public void onTextChanged(final CharSequence arg0, final int arg1, final int arg2, final int arg3) {
             try {
                 seekBar.setProgress(Integer.parseInt(arg0.toString()));
             } catch (NumberFormatException e) {
@@ -647,7 +646,7 @@ public class MainActivity extends Activity {
          *      android.view.View, int, long)
          */
         @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+        public void onItemClick(final AdapterView<?> adapterView, final View view, final int pos, final long id) {
             ListView list = (ListView) adapterView;
             TextView textView = (TextView) view;
 
@@ -668,7 +667,7 @@ public class MainActivity extends Activity {
      */
     class ShoppingListGestureListener implements OnGesturePerformedListener {
         @Override
-        public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
+        public void onGesturePerformed(final GestureOverlayView overlay, final Gesture gesture) {
             ArrayList<Prediction> predictions = gestureLib.recognize(gesture);
             if (predictions.size() > 0 && predictions.get(0).score > 1.0) {
                 String result = predictions.get(0).name;

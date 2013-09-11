@@ -12,6 +12,7 @@ import de.ronnyfriedland.shoppinglist.entity.Entry;
 import de.ronnyfriedland.shoppinglist.entity.Shoppinglist;
 import de.ronnyfriedland.shoppinglist.entity.SynchronizationData;
 import de.ronnyfriedland.shoppinglist.entity.enums.Quantity;
+import de.ronnyfriedland.shoppinglist.entity.enums.Status;
 
 /**
  * @author Ronny Friedland
@@ -44,7 +45,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
      * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
      */
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(final SQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS " + Entry.TABLE + "(" + Entry.COL_ID + " text primary key, "
                 + Entry.COL_DESCRIPTION + " text not null," + Entry.COL_STATUS + " text not null, "
                 + Entry.COL_QUANTITYVALUE + " integer not null, " + Entry.COL_QUANTITY + " text not null,"
@@ -69,7 +70,7 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
      *      int, int)
      */
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         if (oldVersion < 2) {
             db.execSQL("ALTER TABLE " + Entry.TABLE + " ADD COLUMN " + Entry.COL_IMPORTANT
                     + " integer not null default(0)");
@@ -175,6 +176,39 @@ public class ShoppingListDataSource extends SQLiteOpenHelper {
             database.close();
         }
         return entries;
+    }
+
+    /**
+     * Retrieves the current {@link Entry}.
+     * 
+     * @param uuid
+     *            the uuid of the entry
+     * 
+     * @return the current {@link Entry}
+     */
+    public Entry getEntry(final String uuid) {
+        Entry entry = null;
+        SQLiteDatabase database = getReadableDatabase();
+        Cursor cursor = database.query(Entry.TABLE, new String[] { Entry.COL_ID, Entry.COL_DESCRIPTION,
+                Entry.COL_STATUS, Entry.COL_QUANTITYVALUE, Entry.COL_QUANTITY, Entry.COL_IMPORTANT, Entry.COL_LIST,
+                Entry.COL_IMAGE }, Entry.COL_ID + "=?", new String[] { uuid }, null, null, null);
+        try {
+            if (cursor.moveToFirst()) {
+                entry = new Entry(cursor.getString(0));
+                entry.setDescription(cursor.getString(1));
+                entry.setStatus(Status.valueOf(cursor.getString(2)));
+                entry.setQuantity(new Quantity(cursor.getInt(3), cursor.getString(4)));
+                entry.setImportant(cursor.getInt(5));
+                entry.setList(new Shoppinglist(cursor.getString(6)));
+                entry.setImage(cursor.getBlob(7));
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            database.close();
+        }
+        return entry;
     }
 
     /**

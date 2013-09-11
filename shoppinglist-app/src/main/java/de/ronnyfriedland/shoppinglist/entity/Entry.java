@@ -111,11 +111,16 @@ public class Entry extends AbstractEntity {
     @Override
     public String toString() {
         StringBuilder sbuild = new StringBuilder();
-        sbuild.append(getQuantity().getValue()).append(" ");
+        if (getQuantity().getValue() > 0) {
+            sbuild.append(getQuantity().getValue()).append(" ");
+        }
         if (!(null == getQuantity().getUnit() || "".equals(getQuantity().getUnit()))) {
             sbuild.append(getQuantity().getUnit()).append(" ");
         }
         sbuild.append(getDescription());
+        if (null != getImage()) {
+            sbuild.append(" (*)");
+        }
         return sbuild.toString();
     }
 }

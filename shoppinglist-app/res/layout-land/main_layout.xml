@@ -130,7 +130,14 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:visibility="invisible" />
-                    </LinearLayout>
+                        
+                        <EditText
+                            android:id="@+id/textViewImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:visibility="invisible" />                        
+                        </LinearLayout>
                 </android.gesture.GestureOverlayView>
             </LinearLayout>
 

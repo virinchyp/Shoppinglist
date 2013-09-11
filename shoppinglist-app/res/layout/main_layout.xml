@@ -63,14 +63,6 @@
                     android:layout_height="wrap_content"
                     class="LinearLayout" >
 
-                    <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="Bild hinzufügen"
-                        android:minWidth="50dp"
-                        android:src="@android:drawable/ic_menu_camera" />
-                    
 	                <SeekBar
 	                    android:id="@+id/seekBarQuantityValue"
 	                    android:layout_width="fill_parent"
@@ -144,6 +136,13 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:visibility="invisible" />
+
+                        <EditText
+                            android:id="@+id/textViewImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:visibility="invisible" />                        
                     </LinearLayout>
                 </android.gesture.GestureOverlayView>
             </LinearLayout>

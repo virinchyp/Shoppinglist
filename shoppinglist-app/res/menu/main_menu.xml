@@ -23,7 +23,8 @@
             android:id="@+id/sendList"
             android:menuCategory="secondary"
             android:showAsAction="never"
-            android:title="@string/syncList">
+            android:title="@string/syncList"
+            android:icon="@android:drawable/ic_menu_upload">
         </item-->
         <item
             android:id="@+id/exit"
