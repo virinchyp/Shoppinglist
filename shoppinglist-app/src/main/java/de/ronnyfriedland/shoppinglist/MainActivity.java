@@ -29,12 +29,14 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -146,47 +148,61 @@ public class MainActivity extends Activity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                String uuid = textUuid.getText().toString();
-                String imagePath = textImage.getText().toString();
-                String quantity = textQuantityValue.getText().toString();
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        String uuid = textUuid.getText().toString();
+                        String imagePath = textImage.getText().toString();
+                        String quantity = textQuantityValue.getText().toString();
 
-                Integer quantityValue = "".equals(quantity) ? 0 : Integer.valueOf(textQuantityValue.getText()
-                        .toString());
-                String quantityUnit = (String) spinnerQuantity.getSelectedItem();
-                String description = textDescription.getText().toString();
-                Boolean important = checkboxImportant.isChecked();
+                        Integer quantityValue = "".equals(quantity) ? 0 : Integer.valueOf(textQuantityValue.getText()
+                                .toString());
+                        String quantityUnit = (String) spinnerQuantity.getSelectedItem();
+                        String description = textDescription.getText().toString();
+                        Boolean important = checkboxImportant.isChecked();
 
-                Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
+                        Shoppinglist list = ShoppingListDataSource.getInstance(getBaseContext()).getList();
 
-                Entry entry;
-                if (null == uuid || "".equals(uuid)) {
-                    entry = new Entry();
-                } else {
-                    entry = ShoppingListDataSource.getInstance(getBaseContext()).getEntry(uuid);
-                }
-                entry.setQuantity(new Quantity(quantityValue, quantityUnit));
-                entry.setDescription(description);
-                entry.setList(list);
-                entry.setImportant(important);
+                        Entry entry;
+                        if (null == uuid || "".equals(uuid)) {
+                            entry = new Entry();
+                        } else {
+                            entry = ShoppingListDataSource.getInstance(getBaseContext()).getEntry(uuid);
+                        }
+                        entry.setQuantity(new Quantity(quantityValue, quantityUnit));
+                        entry.setDescription(description);
+                        entry.setList(list);
+                        entry.setImportant(important);
 
-                if (null != imagePath && !"".equals(imagePath)) {
-                    Bitmap image = BitmapFactory.decodeFile(imagePath);
-                    ByteArrayOutputStream buffer = new ByteArrayOutputStream(image.getWidth() * image.getHeight());
-                    image.compress(CompressFormat.PNG, 90, buffer);
-                    entry.setImage(buffer.toByteArray());
-                }
+                        if (null != imagePath && !"".equals(imagePath)) {
+                            Bitmap image = BitmapFactory.decodeFile(imagePath);
 
-                if (null == uuid || "".equals(uuid)) {
-                    ShoppingListDataSource.getInstance(getBaseContext()).createEntry(entry);
-                    ((ShoppingListAdapter<Entry>) listView.getAdapter()).add(entry);
-                } else {
-                    ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);
-                    ((ShoppingListAdapter<Entry>) listView.getAdapter()).update(entry);
-                }
+                            DisplayMetrics metrics = new DisplayMetrics();
+                            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                            Bitmap resizedBitmap = Bitmap.createScaledBitmap(image, metrics.widthPixels,
+                                    metrics.heightPixels, false);
+                            ByteArrayOutputStream buffer = new ByteArrayOutputStream(resizedBitmap.getWidth()
+                                    * resizedBitmap.getHeight());
+                            resizedBitmap.compress(CompressFormat.PNG, 90, buffer);
+                            entry.setImage(buffer.toByteArray());
+                        }
+
+                        if (null == uuid || "".equals(uuid)) {
+                            ShoppingListDataSource.getInstance(getBaseContext()).createEntry(entry);
+                            ((ShoppingListAdapter<Entry>) listView.getAdapter()).add(entry);
+                        } else {
+                            ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);
+                            ((ShoppingListAdapter<Entry>) listView.getAdapter()).update(entry);
+                        }
+                    }
+                });
 
                 ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
 
-                tabHost.setCurrentTabByTag(getResources().getString(R.string.list));
+                // tabHost.setCurrentTabByTag(getResources().getString(R.string.list));
+                Toast.makeText(getBaseContext(), getResources().getString(R.string.createSuccess), Toast.LENGTH_LONG)
+                        .show();
             }
         });
 
