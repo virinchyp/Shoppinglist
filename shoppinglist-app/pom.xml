@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>de.kerron</groupId>
+		<groupId>de.ronnyfriedland</groupId>
 		<artifactId>shoppinglist-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -25,20 +25,9 @@
 			<systemPath>${env.ANDROID_HOME}/extras/android/support/v4/android-support-v4.jar</systemPath>
 		</dependency>
 		<dependency>
-			<groupId>de.kerron</groupId>
+			<groupId>de.ronnyfriedland</groupId>
 			<artifactId>shoppinglist-common</artifactId>
 			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>de.kerron</groupId>
-			<artifactId>shoppinglist-client</artifactId>
-			<version>${project.parent.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-configuration</artifactId>
-					<groupId>commons-configuration</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 	</dependencies>
 	<build>
