@@ -180,8 +180,10 @@ public class MainActivity extends Activity {
                             DisplayMetrics metrics = new DisplayMetrics();
                             getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-                            Bitmap resizedBitmap = Bitmap.createScaledBitmap(image, metrics.widthPixels,
-                                    metrics.heightPixels, false);
+                            int width = (int) (metrics.widthPixels * 0.75);
+                            int height = (int) (metrics.heightPixels * 0.75);
+
+                            Bitmap resizedBitmap = Bitmap.createScaledBitmap(image, width, height, false);
                             ByteArrayOutputStream buffer = new ByteArrayOutputStream(resizedBitmap.getWidth()
                                     * resizedBitmap.getHeight());
                             resizedBitmap.compress(CompressFormat.PNG, 90, buffer);
@@ -200,7 +202,6 @@ public class MainActivity extends Activity {
 
                 ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
 
-                // tabHost.setCurrentTabByTag(getResources().getString(R.string.list));
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.createSuccess), Toast.LENGTH_LONG)
                         .show();
             }
