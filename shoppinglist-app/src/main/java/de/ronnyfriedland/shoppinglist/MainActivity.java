@@ -204,6 +204,8 @@ public class MainActivity extends Activity {
 
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.createSuccess), Toast.LENGTH_LONG)
                         .show();
+
+                initCreateTabData("", 1, 0, "", "", false);
             }
         });
 
