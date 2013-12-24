@@ -48,6 +48,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -201,6 +202,9 @@ public class MainActivity extends Activity {
                 });
 
                 ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                 Toast.makeText(getBaseContext(), getResources().getString(R.string.createSuccess), Toast.LENGTH_LONG)
                         .show();
