@@ -400,7 +400,7 @@ public class MainActivity extends Activity {
                     notificationManager.notify(0, notification);
                 }
             }
-        }, cal.getTime(), 1); // show every day
+        }, cal.getTime(), 1000 * 60 * 60 * 24); // show every day
 
     }
 
