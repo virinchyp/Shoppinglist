@@ -336,6 +336,7 @@ public class MainActivity extends Activity {
         gestureOverlayTab2 = (GestureOverlayView) findViewById(R.id.gestureOverlayTab2);
 
         gestureLib = GestureLibraries.fromRawResource(getBaseContext(), R.raw.gestures);
+        gestureLib.load();
 
         notificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -399,7 +400,7 @@ public class MainActivity extends Activity {
                     notificationManager.notify(0, notification);
                 }
             }
-        }, cal.getTime(), 1000 * 60 * 60 * 24); // show every day
+        }, cal.getTime(), 1); // show every day
 
     }
 
