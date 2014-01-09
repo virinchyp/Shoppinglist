@@ -198,10 +198,10 @@ public class MainActivity extends Activity {
                             ShoppingListDataSource.getInstance(getBaseContext()).updateEntry(entry);
                             ((ShoppingListAdapter<Entry>) listView.getAdapter()).update(entry);
                         }
+
+                        ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
                     }
                 });
-
-                ((ShoppingListAdapter<Entry>) listView.getAdapter()).notifyDataSetChanged();
 
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);

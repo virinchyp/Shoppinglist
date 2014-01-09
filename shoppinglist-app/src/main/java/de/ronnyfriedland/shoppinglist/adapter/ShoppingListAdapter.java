@@ -34,7 +34,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @param entries
      *            inital list of entries
      */
-    public ShoppingListAdapter(Context context, int resource, Collection<T> entries) {
+    public ShoppingListAdapter(final Context context, final int resource, final Collection<T> entries) {
         super(context, resource);
         addAll(entries);
     }
@@ -47,7 +47,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @param resource
      *            the resource
      */
-    public ShoppingListAdapter(Context context, int resource) {
+    public ShoppingListAdapter(final Context context, final int resource) {
         super(context, resource);
     }
 
@@ -67,7 +67,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @see android.widget.ArrayAdapter#getItem(int)
      */
     @Override
-    public T getItem(int position) {
+    public T getItem(final int position) {
         return entries.get(position);
     }
 
@@ -77,7 +77,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @see android.widget.ArrayAdapter#getItemId(int)
      */
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         return position;
     }
 
@@ -88,7 +88,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      *      android.view.ViewGroup)
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
         TextView view = (TextView) super.getView(position, convertView, parent);
         UIHelper.setFont(getContext(), view);
 
@@ -108,7 +108,8 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * 
      * @see android.widget.ArrayAdapter#addAll(java.util.Collection)
      */
-    public void addAll(Collection<? extends T> collection) {
+    @Override
+    public void addAll(final Collection<? extends T> collection) {
         entries.addAll(collection);
     }
 
@@ -118,7 +119,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @see android.widget.ArrayAdapter#add(java.lang.Object)
      */
     @Override
-    public void add(T entry) {
+    public void add(final T entry) {
         entries.add(entry);
     }
 
@@ -128,7 +129,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @see android.widget.ArrayAdapter#remove(java.lang.Object)
      */
     @Override
-    public void remove(T entry) {
+    public void remove(final T entry) {
         entries.remove(entry);
     };
 
@@ -138,7 +139,7 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
      * @param entry
      *            the list entry to update
      */
-    public void update(T entry) {
+    public void update(final T entry) {
         if (null != entry) {
             for (Entry existingEntry : entries) {
                 if (existingEntry.getUuid().equals(entry.getUuid())) {
@@ -176,8 +177,13 @@ public class ShoppingListAdapter<T extends Entry> extends ArrayAdapter<T> {
              * @see java.util.Comparator#compare(java.lang.Object,
              *      java.lang.Object)
              */
-            public int compare(T lhs, T rhs) {
-                return rhs.getImportant().compareTo(lhs.getImportant());
+            @Override
+            public int compare(final T lhs, final T rhs) {
+                if (lhs.getImportant().equals(rhs.getImportant())) {
+                    return lhs.getDescription().compareTo(rhs.getDescription());
+                } else {
+                    return rhs.getImportant().compareTo(lhs.getImportant());
+                }
             };
         });
         super.notifyDataSetChanged();
