@@ -19,7 +19,7 @@
     <string name="description">Beschreibung</string>
     <string name="confirmDelete">Einträge löschen?</string>
     <string name="deleteSuccess">Einträge gelöscht</string>
-    <string name="createSuccess">Eintrag erstellt</string>
+    <string name="createSuccess">Eintrag gespeichert</string>
     <string name="notificationImportantEntryCount">Liste enthält wichtige Einträge</string>
     <string name="noImage">Kein Bild hinterlegt</string>
     <string name="empty"></string>

@@ -2,11 +2,8 @@ package de.ronnyfriedland.shoppinglist;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.NotificationCompat;
 import android.text.Editable;
@@ -91,6 +89,9 @@ public class MainActivity extends Activity {
 
     // notification
     private NotificationManager notificationManager;
+
+    // handler
+    private final Handler handler = new Handler();
 
     // common (tab)
     private transient TabHost tabHost;
@@ -371,14 +372,12 @@ public class MainActivity extends Activity {
     }
 
     private void initTimer() {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        Timer notificationTimer = new Timer();
-        notificationTimer.schedule(new TimerTask() {
+        final long delay = 1000 * 60 * 60 * 24; // every day
+        Runnable timer = new Runnable() {
             /**
              * {@inheritDoc}
              * 
-             * @see java.util.TimerTask#run()
+             * @see java.lang.Runnable#run()
              */
             @Override
             public void run() {
@@ -398,10 +397,11 @@ public class MainActivity extends Activity {
                             .setOnlyAlertOnce(true).build();
                     notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
                     notificationManager.notify(0, notification);
+                    handler.postDelayed(this, delay);
                 }
             }
-        }, cal.getTime(), 1000 * 60 * 60 * 24); // show every day
-
+        };
+        handler.postDelayed(timer, delay);
     }
 
     /**
